@@ -35,6 +35,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        manifestPlaceholders["naverMapApiKey"] = apiKey
     }
 
     buildTypes {
