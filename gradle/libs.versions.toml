@@ -1,0 +1,92 @@
+[versions]
+agp = "8.2.0"
+googleServices = "4.4.0"
+firebaseCrashlytics = "2.9.9"
+firebasePerf = "1.4.2"
+kotlin = "1.9.0"
+coreKtx = "1.12.0"
+lifecycleRuntimeKtx = "2.6.2"
+activityKtx = "1.8.2"
+fragmentKtx = "1.6.2"
+splashScreen = "1.0.1"
+hilt = "2.48"
+coroutines = "1.7.3"
+composeBom = "2023.10.01"
+composeActivity = "1.8.2"
+composeNavigation = "2.7.6"
+composeHilt = "1.1.0"
+firebaseBom = "32.7.0"
+appcompat = "1.6.1"
+retrofit = "2.9.0"
+room = "2.6.1"
+coil = "2.5.0"
+naverMap = "3.17.0"
+naverMapCompose = "1.5.2"
+mapLocation = "21.0.1"
+naverMapLocation = "21.0.1"
+
+[libraries]
+# Android
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+# Hilt
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+# Coroutines
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+# Compose
+#compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version="1.1.2" }
+compose-material = { group = "androidx.compose.material", name = "material", version = "1.5.4" }
+# Compose Dependency
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "composeActivity" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
+compose-hilt = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "composeHilt" }
+# Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-anlytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
+# retrofit
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
+# room
+room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+# coil
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+# naver map
+mapSdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "naverMap" }
+naverMapCompose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naverMapCompose" }
+mapLocation = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "mapLocation" }
+naverMapLocation = { group = "com.google.android.gms", name = "play-services-location", version.ref = "naverMapLocation" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+jetbrainsKotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices"}
+firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics"}
+firebasePerf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerf"}
+
+[bundles]
+compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-tooling",  "compose-material3", "compose-material"]
+firebase = ["firebase-bom", "firebase-anlytics", "firebase-crashlytics", "firebase-perf"]
+hilt = ["hilt-android", "hilt-android-compiler"]
+coroutines = ["coroutines-core", "coroutines-android"]
+androidx = [ "androidx-core-ktx", "androidx-appcompat", "androidx-lifecycle-runtime-ktx", "androidx-activity-ktx", "androidx-fragment-ktx"]
+composeDependency = ["compose-activity", "compose-navigation", "compose-hilt"]
+room = ["room", "roomKtx"]
+retrofit = ["retrofit"]
+coil = ["coil"]
+naverMap = ["mapSdk", "naverMapCompose", "mapLocation", "naverMapLocation"]
+
