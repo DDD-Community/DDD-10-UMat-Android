@@ -4,9 +4,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.jetbrainsKotlinKapt)
-//    alias(libs.plugins.googleServices)
-//    alias(libs.plugins.firebaseCrashlytics)
-//    alias(libs.plugins.firebasePerf)
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.firebaseCrashlytics)
+    alias(libs.plugins.firebasePerf)
 //    alias(libs.plugins.androidHilt)
 }
 
@@ -74,8 +74,15 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.coil)
     implementation(libs.bundles.coroutines)
+
 //    implementation(libs.bundles.hilt)
+
     implementation(libs.bundles.retrofit)
+
     implementation(libs.bundles.room)
     kapt(libs.roomCompiler)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
 }
