@@ -9,6 +9,7 @@ lifecycleRuntimeKtx = "2.6.2"
 activityKtx = "1.8.2"
 fragmentKtx = "1.6.2"
 splashScreen = "1.0.1"
+googleDevtoolsKsp = "1.9.22-1.0.16"
 hilt = "2.48"
 coroutines = "1.7.3"
 composeBom = "2023.10.01"
@@ -72,7 +73,7 @@ naverMapLocation = { group = "com.google.android.gms", name = "play-services-loc
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-jetbrainsKotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+googleDevtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKsp" }
 androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices"}
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics"}
@@ -81,7 +82,6 @@ firebasePerf = { id = "com.google.firebase.firebase-perf", version.ref = "fireba
 [bundles]
 compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-tooling",  "compose-material3", "compose-material"]
 firebase = ["firebase-anlytics", "firebase-crashlytics", "firebase-perf"]
-hilt = ["hilt-android", "hilt-android-compiler"]
 coroutines = ["coroutines-core", "coroutines-android"]
 androidx = [ "androidx-core-ktx", "androidx-appcompat", "androidx-lifecycle-runtime-ktx", "androidx-activity-ktx", "androidx-fragment-ktx"]
 composeDependency = ["compose-activity", "compose-navigation", "compose-hilt"]
