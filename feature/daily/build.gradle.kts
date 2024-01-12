@@ -1,37 +1,19 @@
-import java.util.Properties
-
 plugins {
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleDevtoolsKsp)
-    alias(libs.plugins.googleServices)
-    alias(libs.plugins.firebaseCrashlytics)
-    alias(libs.plugins.firebasePerf)
     alias(libs.plugins.androidHilt)
 }
 
 android {
-    namespace = "com.teople.umat"
+    namespace = "com.teople.umat.feature.daily"
     compileSdk = 34
 
-    val localProperties = Properties().apply {
-        load(project.rootProject.file("local.properties").inputStream())
-    }
-    val naverMapApiKey = localProperties.getProperty("api_key") ?: ""
-
     defaultConfig {
-        applicationId = "com.teople.umat"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-
-        manifestPlaceholders["naverMapApiKey"] = naverMapApiKey
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -41,9 +23,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }
-        debug {
-            buildConfigField("String", "NAVER_MAP_API_KEY", naverMapApiKey)
         }
     }
     compileOptions {
@@ -69,9 +48,6 @@ android {
 
 dependencies {
     // Module
-    implementation(project(":feature:home"))
-    implementation(project(":feature:daily"))
-    implementation(project(":feature:mypage"))
     implementation(project(":core:data"))
     implementation(project(":component"))
 
@@ -82,19 +58,9 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.composeDependency)
     implementation(libs.bundles.coil)
-    implementation(libs.bundles.naverMap)
 
     implementation(libs.bundles.coroutines)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    implementation(libs.bundles.retrofit)
-
-    implementation(libs.bundles.room)
-    ksp(libs.roomCompiler)
-
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.bundles.firebase)
 }
