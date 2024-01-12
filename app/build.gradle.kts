@@ -10,19 +10,14 @@ plugins {
 //    alias(libs.plugins.androidHilt)
 }
 
-
-
 android {
     namespace = "com.teople.umat"
     compileSdk = 34
 
-//    Properties properties = new Properties()
-//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//    def apiKey = properties.getProperty('api_key') ?: ""
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").inputStream())
-    val apiKey = properties.getProperty("naver_api_key") ?: ""
+    val localProperties = Properties().apply {
+        load(project.rootProject.file("local.properties").inputStream())
+    }
+    val naverMapApiKey = localProperties.getProperty("api_key") ?: ""
 
     defaultConfig {
         applicationId = "com.teople.umat"
@@ -36,7 +31,7 @@ android {
             useSupportLibrary = true
         }
 
-        manifestPlaceholders["naverMapApiKey"] = apiKey
+        manifestPlaceholders["naverMapApiKey"] = naverMapApiKey
     }
 
     buildTypes {
@@ -48,7 +43,7 @@ android {
             )
         }
         debug {
-            buildConfigField("String", "NAVER_MAP_API_KEY", apiKey)
+            buildConfigField("String", "NAVER_MAP_API_KEY", naverMapApiKey)
         }
     }
     compileOptions {
