@@ -80,7 +80,7 @@ firebasePerf = { id = "com.google.firebase.firebase-perf", version.ref = "fireba
 
 [bundles]
 compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-tooling",  "compose-material3", "compose-material"]
-firebase = ["firebase-bom", "firebase-anlytics", "firebase-crashlytics", "firebase-perf"]
+firebase = ["firebase-anlytics", "firebase-crashlytics", "firebase-perf"]
 hilt = ["hilt-android", "hilt-android-compiler"]
 coroutines = ["coroutines-core", "coroutines-android"]
 androidx = [ "androidx-core-ktx", "androidx-appcompat", "androidx-lifecycle-runtime-ktx", "androidx-activity-ktx", "androidx-fragment-ktx"]
