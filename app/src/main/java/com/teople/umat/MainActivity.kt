@@ -26,7 +26,7 @@ import com.naver.maps.map.NaverMapSdk
 import com.teople.umat.feature.daily.DailyScreen
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
-import com.teople.umat.ui.theme.UmatTheme
+import com.teople.umat.component.ui.theme.UmatTheme
 
 class MainActivity : ComponentActivity() {
     val items = listOf<BottomNavItem>(

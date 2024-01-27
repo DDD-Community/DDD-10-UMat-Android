@@ -1,4 +1,4 @@
-package com.teople.umat.ui.theme
+package com.teople.umat.component.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
