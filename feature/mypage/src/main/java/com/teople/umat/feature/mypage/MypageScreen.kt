@@ -1,29 +1,61 @@
 package com.teople.umat.feature.mypage
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import android.content.res.Configuration
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.teople.umat.component.icon.UmatIcon
+import com.teople.umat.component.icon.umaticon.IcSettingsOutlined
+import com.teople.umat.component.ui.theme.UmatTheme
+import com.teople.umat.component.widget.component.UmatAppBar
 
 @Composable
-fun MypageScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.DarkGray)
-    ) {
-        Text(
-            text = "MyPage",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.Center)
+fun MypageScreen(
+    viewModel: MypageViewModel = hiltViewModel(),
+    onNavigator: () -> Unit
+) {
+
+    Scaffold(
+        modifier = Modifier,
+        topBar = {
+            UmatAppBar(
+                action = {
+                    Icon(
+                        modifier = Modifier.clickable {
+                            onNavigator()
+                        },
+                        imageVector = UmatIcon.IcSettingsOutlined,
+                        contentDescription = null
+                    )
+                }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+
+        }
+    }
+}
+
+@Preview(group = "MypageScreen")
+@Preview(group = "MypageScreen", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun MypageScreenPreview() {
+    UmatTheme {
+        MypageScreen(
+            onNavigator = {
+
+            }
         )
     }
 }
