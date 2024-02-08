@@ -21,7 +21,7 @@ import com.teople.umat.component.R
 
 @Composable
 fun ComponentButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     backgroundColor: Color,
     text: String,
     textColor: Color = Color.White,
