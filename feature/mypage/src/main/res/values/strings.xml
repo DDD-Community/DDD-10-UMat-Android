@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="mypage_header_current_date">%s~ (%d일)</string>
+    
+    <string name="mypage_summary_wanted_mine">내가\n가고 싶은 곳</string>
+    <string name="mypage_summary_wanted_yours">네가\n가고 싶은 곳</string>
+    <string name="mypage_summary_wanted_ours">우리 함께\n가고 싶은 곳</string>
+    <string name="mypage_summary_wanted_count">%d개</string>
+
+    <string name="mypage_allergy_default_title">알레르기 음식이 있따면, 상대방에게 알려줄까요?</string>
+    <string name="mypage_allergy_default_register">알레르기 음식 등록하기</string>
+
+    <string name="mypage_allergy_mine_title">내 알레르기</string>
+    <string name="mypage_allergy_yours_title">%s의 알레르기</string>
+
+</resources>
