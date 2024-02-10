@@ -76,7 +76,7 @@ fun UmatBadge(
 object UmatBadgeDefaults {
 
     @Composable
-    fun filled(
+    fun Filled(
         backgroundColor: Color,
         textColor: Color = White
     ): UmatBadgeStyle {
@@ -89,7 +89,7 @@ object UmatBadgeDefaults {
     }
 
     @Composable
-    fun outlined(
+    fun Outlined(
         borderColor: Color = Gray200,
         backgroundColor: Color = White,
         textColor: Color = Gray500
@@ -195,13 +195,13 @@ private fun UmatBadgePreview() {
             // Filled
             UmatBadge(
                 title = "Label",
-                style = UmatBadgeDefaults.outlined()
+                style = UmatBadgeDefaults.Outlined()
             )
 
             // Outline
             UmatBadge(
                 title = "Label",
-                style = UmatBadgeDefaults.filled(
+                style = UmatBadgeDefaults.Filled(
                     backgroundColor = when (isSystemInDarkTheme()) {
                         true -> Orange500
                         false -> Black

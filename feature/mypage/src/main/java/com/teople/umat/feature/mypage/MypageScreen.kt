@@ -417,7 +417,7 @@ private fun MypageAllergySectionRow(
             items(allergies) { item ->
                 UmatBadge(
                     title = item,
-                    style = UmatBadgeDefaults.filled(
+                    style = UmatBadgeDefaults.Filled(
                         backgroundColor = if (isMine) {
                             Orange500
                         } else {
