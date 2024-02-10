@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Umat</string>
-    <string name="home">Home</string>
-    <string name="daily">Daily</string>
-    <string name="my_page">My Page</string>
+    <string name="home">홈</string>
+    <string name="my_page">마이페이지</string>
 </resources>
