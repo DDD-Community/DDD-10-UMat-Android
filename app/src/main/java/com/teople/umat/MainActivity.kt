@@ -3,39 +3,57 @@ package com.teople.umat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.naver.maps.map.NaverMapSdk
-import com.teople.umat.feature.daily.DailyScreen
+import com.teople.umat.component.icon.UmatIcon
+import com.teople.umat.component.icon.umaticon.IcAddFilled
+import com.teople.umat.component.icon.umaticon.IcHomeOutlined
+import com.teople.umat.component.icon.umaticon.IcMyOutlined
+import com.teople.umat.component.ui.theme.Gray300
+import com.teople.umat.component.ui.theme.Gray400
+import com.teople.umat.component.ui.theme.Gray700
+import com.teople.umat.component.ui.theme.UmatTheme
+import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
-import com.teople.umat.component.ui.theme.UmatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val items = listOf<BottomNavItem>(
-        BottomNavItem.Home,
-        BottomNavItem.Daily,
-        BottomNavItem.MyPage
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,34 +71,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         Scaffold(
             bottomBar = {
-                BottomNavigation {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    items.forEach { bottomNavItem ->
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = bottomNavItem.icon),
-                                    modifier = Modifier
-                                        .width(26.dp)
-                                        .height(26.dp),
-                                    contentDescription = stringResource(id = bottomNavItem.title)
-                                )
-                            },
-                            selected = currentDestination?.hierarchy?.any { bottomNavItem.screenRoute == it.route } == true,
-                            onClick = {
-                                navController.navigate(bottomNavItem.screenRoute) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        )
-                    }
-                }
+                UmatBottomBar(navController = navController)
             }
         ) { innerPadding ->
             NavHost(
@@ -91,9 +82,6 @@ class MainActivity : ComponentActivity() {
                 composable(BottomNavItem.Home.screenRoute) {
                     HomeScreen()
                 }
-                composable(BottomNavItem.Daily.screenRoute) {
-                    DailyScreen()
-                }
                 composable(BottomNavItem.MyPage.screenRoute) {
                     MypageScreen(
                         onNavigator = {}
@@ -103,17 +91,104 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    sealed class BottomNavItem(
-        val title: Int, val icon: Int, val screenRoute: String
+    @Composable
+    fun UmatBottomBar(
+        navController: NavHostController
     ) {
-        object Home : BottomNavItem(R.string.home, R.drawable.ic_home, HOME)
-        object Daily : BottomNavItem(R.string.daily, R.drawable.ic_daily, DAILY)
-        object MyPage : BottomNavItem(R.string.my_page, R.drawable.ic_my_page, MY_PAGE)
+        val navStackBackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navStackBackEntry?.destination
+
+        Row(
+            modifier = Modifier
+                .border(1.dp, Gray300)
+                .background(Color.Transparent)
+                .fillMaxWidth()
+                .height(80.dp),
+        ) {
+            BottomNavButton(
+                screen = BottomNavItem.Home,
+                currentDestination = currentDestination,
+                navController = navController
+            )
+            IconButton(onClick = { TODO("장소 추가 구현") }) {
+                Icon(
+                    imageVector = UmatIcon.IcAddFilled,
+                    contentDescription = "icon",
+                    modifier = Modifier
+                        .align(Alignment.Top)
+                        .padding(top = 6.dp)
+                        .size(64.dp)
+                )
+            }
+            BottomNavButton(
+                screen = BottomNavItem.MyPage,
+                currentDestination = currentDestination,
+                navController = navController
+            )
+        }
+    }
+
+    @Composable
+    fun RowScope.BottomNavButton(
+        screen: BottomNavItem,
+        currentDestination: NavDestination?,
+        navController: NavHostController
+    ) {
+        val selected = currentDestination?.hierarchy?.any { it.route == screen.screenRoute } == true
+        val contentColor = if (selected) Gray700 else Gray400
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 14.dp)
+                .weight(1f)
+                .clickable(
+                    onClick = {
+                        navController.navigate(screen.screenRoute) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    })
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.Center),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    imageVector = screen.icon,
+                    contentDescription = "icon",
+                    tint = contentColor,
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+                Text(
+                    text = stringResource(id = screen.title),
+                    style = UmatTypography().pretendardMedium12.copy(
+                        color = contentColor
+                    )
+                )
+            }
+        }
+    }
+
+    sealed class BottomNavItem(
+        val title: Int, val icon: ImageVector, val screenRoute: String
+    ) {
+        object Home : BottomNavItem(R.string.home, UmatIcon.IcHomeOutlined, HOME)
+        object MyPage : BottomNavItem(R.string.my_page, UmatIcon.IcMyOutlined, MY_PAGE)
     }
 
     companion object {
         const val HOME = "HOME"
-        const val DAILY = "DAILY"
         const val MY_PAGE = "MY_PAGE"
+    }
+
+    @Preview
+    @Composable
+    fun BottomNavItem() {
+        UmatBottomBar(navController = rememberNavController())
     }
 }
