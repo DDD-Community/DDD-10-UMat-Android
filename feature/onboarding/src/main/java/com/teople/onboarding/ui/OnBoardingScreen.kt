@@ -1,8 +1,5 @@
 package com.teople.onboarding.ui
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,6 +46,7 @@ import com.teople.umat.component.ui.theme.Gray950
 import com.teople.umat.component.widget.ComponentButton
 import com.teople.umat.component.widget.component.UmatTextField
 import com.teople.umat.component.widget.component.UmatTextFieldDefaults
+import com.teople.umat.component.widget.component.UmatTransition
 import com.teople.umat.component.R as ComponentR
 
 @Composable
@@ -58,157 +56,39 @@ fun OnBoardingScreen() {
     NavHost(navController = navController, startDestination = "guide") {
         composable(
             route = OnBoardingScreens.Guide.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            content = {
-                GuideScreen(
-                    viewModel = viewModel
-                )
-            })
+            enterTransition = { UmatTransition.slideEnterHorizontally() },
+            exitTransition = { UmatTransition.slideExitHorizontally() },
+            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            content = { GuideScreen(viewModel = viewModel) })
         composable(
             route = OnBoardingScreens.SocialLogin.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            content = {
-                SocialLoginScreen(viewModel = viewModel)
-            })
+            enterTransition = { UmatTransition.slideEnterHorizontally() },
+            exitTransition = { UmatTransition.slideExitHorizontally() },
+            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            content = { SocialLoginScreen(viewModel = viewModel) })
         composable(
             route = OnBoardingScreens.Nickname.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-        ) {
-            NicknameScreen(
-                viewModel = viewModel
-            )
-        }
+            enterTransition = { UmatTransition.slideEnterHorizontally() },
+            exitTransition = { UmatTransition.slideExitHorizontally() },
+            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            content = { NicknameScreen(viewModel = viewModel) })
         composable(
             route = OnBoardingScreens.Connect.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-        ) {
-            ConnectScreen(
-                viewModel = viewModel
-            )
-        }
+            enterTransition = { UmatTransition.slideEnterHorizontally() },
+            exitTransition = { UmatTransition.slideExitHorizontally() },
+            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            content = { ConnectScreen(viewModel = viewModel) })
         composable(
             route = OnBoardingScreens.InviteCode.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-        ) {
-            CodeInputScreen(
-                viewModel = viewModel
-            )
-        }
+            enterTransition = { UmatTransition.slideEnterHorizontally() },
+            exitTransition = { UmatTransition.slideExitHorizontally() },
+            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            content = { CodeInputScreen(viewModel = viewModel) })
     }
 }
 
