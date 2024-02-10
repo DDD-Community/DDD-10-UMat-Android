@@ -274,6 +274,75 @@ fun SocialLoginScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun NicknameScreen(
+    viewModel: OnBoardingViewModel = OnBoardingViewModel(),
+    onNavigateToConnect: () -> Unit = {},
+    navController: NavHostController? = null
+) {
+    val textFieldValue by viewModel.nickNameTextFieldValue.collectAsState()
+    val isButtonEnabled by viewModel.isButtonEnabled.collectAsState()
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController?.navigateUp() }) {
+                            Icon(
+                                painter = painterResource(id = ComponentR.drawable.ic_back),
+                                contentDescription = "Back",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp)
+            ) {
+                Text(
+                    text = "서비스에 표시될\n이름을 적어주세요",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Gray900
+                    ),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .padding(bottom = 32.dp)
+                )
+
+                UmatTextField(
+                    fieldText = textFieldValue,
+                    topLabel = "내가 불리게 될 닉네임을 적어주세요",
+                    supportLabel = "6자 이내, 한글로만 가능해요!",
+                    style = UmatTextFieldDefaults.default(),
+                    onValueChange = { newValue ->
+                        viewModel.onTextFieldValueChange(newValue)
+                    }
+                )
+
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 114.dp)
+                        .height(50.dp),
+                    backgroundColor = Gray800,
+                    text = "다음",
+                    textColor = Color.White,
+                    onClick = onNavigateToConnect,
+                    enabled = isButtonEnabled
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun ConnectScreen() {
     Surface {
         Scaffold(
@@ -369,8 +438,85 @@ fun ConnectScreen() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CodeInputScreen(
+    viewModel: OnBoardingViewModel = OnBoardingViewModel(),
+    onNavigateToConnect: () -> Unit = {},
+    navController: NavHostController? = null
+) {
+    val textFieldValue by viewModel.inviteCodeTextFieldValue.collectAsState()
+    val isInvitedCodeValid by viewModel.isInviteCodeValid.collectAsState()
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController?.navigateUp() }) {
+                            Icon(
+                                painter = painterResource(id = ComponentR.drawable.ic_back),
+                                contentDescription = "Back",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp)
+            ) {
+                Text(
+                    text = "커플 연결 후 시작하기",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Gray900
+                    ),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                )
+                Text(
+                    text = "커플 연결 후 시작하기",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Gray500
+                    ),
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .padding(bottom = 32.dp)
+                )
+                UmatTextField(
+                    fieldText = textFieldValue,
+                    topLabel = "초대 코드 붙여넣기",
+                    supportLabel = if (isInvitedCodeValid) "" else "코드 입력이 잘못되었어요!",
+                    style = UmatTextFieldDefaults.default(),
+                    onValueChange = { newValue ->
+                        viewModel.onInviteCodeTextFieldValueChange(newValue)
+                    }
+                )
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 114.dp)
+                        .height(50.dp),
+                    backgroundColor = Gray800,
+                    text = "다음",
+                    textColor = Color.White,
+                    onClick = onNavigateToConnect,
+                    enabled = isInvitedCodeValid
+                )
+            }
+        }
+    }
+}
+
 enum class OnBoardingScreens() {
-    Guide, SocialLogin, Connect
+    Guide, SocialLogin, Nickname, Connect, CodeInput
 }
 
 @Preview(heightDp = 640, widthDp = 360)
@@ -387,6 +533,18 @@ fun SocialLoginView() {
 
 @Preview(heightDp = 640, widthDp = 360)
 @Composable
+fun NicknameView() {
+    NicknameScreen()
+}
+
+@Preview(heightDp = 640, widthDp = 360)
+@Composable
 fun ConnectView() {
     ConnectScreen()
+}
+
+@Preview(heightDp = 640, widthDp = 360)
+@Composable
+fun CodeInputView() {
+    CodeInputScreen()
 }

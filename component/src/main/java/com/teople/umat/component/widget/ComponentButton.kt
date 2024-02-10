@@ -26,13 +26,15 @@ fun ComponentButton(
     text: String,
     textColor: Color = Color.White,
     onClick: () -> Unit,
-    icon: @Composable (RowScope.() -> Unit)? = null
+    icon: @Composable (RowScope.() -> Unit)? = null,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(containerColor = backgroundColor),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        enabled = enabled
     ) {
         icon?.invoke(this)
         Text(
