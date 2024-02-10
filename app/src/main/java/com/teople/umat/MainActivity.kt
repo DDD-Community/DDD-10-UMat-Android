@@ -27,7 +27,9 @@ import com.teople.umat.feature.daily.DailyScreen
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
 import com.teople.umat.component.ui.theme.UmatTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     val items = listOf<BottomNavItem>(
         BottomNavItem.Home,
@@ -93,7 +95,9 @@ class MainActivity : ComponentActivity() {
                     DailyScreen()
                 }
                 composable(BottomNavItem.MyPage.screenRoute) {
-                    MypageScreen()
+                    MypageScreen(
+                        onNavigator = {}
+                    )
                 }
             }
         }

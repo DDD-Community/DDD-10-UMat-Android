@@ -3,7 +3,7 @@ package com.teople.umat.component.icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.teople.umat.component.icon.umaticon.IcAddFilled
 import com.teople.umat.component.icon.umaticon.IcArrowBackFilled
-import com.teople.umat.component.icon.umaticon.IcArrowForwardOutlined
+import com.teople.umat.component.icon.umaticon.IcArrowForwardFilled
 import com.teople.umat.component.icon.umaticon.IcCalenderFilled
 import com.teople.umat.component.icon.umaticon.IcCancleOutlined
 import com.teople.umat.component.icon.umaticon.IcCheckOutlined
@@ -33,7 +33,7 @@ public val UmatIcon.UmatIcons: ____KtList<ImageVector>
       return __UmatIcons!!
     }
     __UmatIcons= listOf(IcCalenderFilled, IcClockOutlined, IcHeartFilled, IcStarOutlined,
-        IcHeartOutlined, IcArrowForwardOutlined, IcMoreOutlined, IcAddFilled,
+        IcHeartOutlined, IcArrowForwardFilled, IcMoreOutlined, IcAddFilled,
         IcCurrentLocationOutlined, IcSearchOutlined, IcMoneyOutlined, IcMyOutlined,
         IcCancleOutlined, IcWarningOutlined, IcArrowBackFilled, IcEditOutlined, IcCheckOutlined,
         IcRefreshOutlined, IcSettingsOutlined, IcHomeOutlined)

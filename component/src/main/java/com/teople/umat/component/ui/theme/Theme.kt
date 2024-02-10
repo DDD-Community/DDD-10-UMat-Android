@@ -1,70 +1,66 @@
 package com.teople.umat.component.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+/**
+ * Color, Typography 만 커스텀으로 별도 제공
+ * MaterialTheme 내부 코드와 동일
+ *
+ * 아래와 같이 접근 후 사용
+ * UmatTheme.typography.lineSeedBold20
+ *
+ * 참고 : https://velog.io/@vov3616/Compose-Custom-Theme-%EB%A7%8C%EB%93%A4%EA%B8%B0
+ */
+object UmatTheme {
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    val colorScheme: UmatColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalColors.current
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
-)
+    val typography: UmatTypography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalTypography.current
+}
 
+/**
+ * 커스텀 테마 아래와 같이 기존과 동일하게 사용
+ * dynamicColorScheme 은 지원하지 않음
+ *
+ * UmatTheme {
+ *     MainScreen()
+ * }
+ */
 @Composable
 fun UmatTheme(
+    colorScheme: UmatColors = UmatTheme.colorScheme,
+    typography: UmatTypography = UmatTheme.typography,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
+    // uiMode 에 따른 색상값 리턴
+    val currentThemeColor = when {
+        darkTheme -> darkColors()
+        else -> colorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    // 색상값 변경 시 Recomposition 대응
+    val rememberedColors = remember {
+        currentThemeColor.copy()
+    }.apply {
+        updateColorsFrom(currentThemeColor)
+    }
+
+    CompositionLocalProvider(
+        LocalColors provides rememberedColors,
+        LocalTypography provides typography
+    ) {
+        ProvideTextStyle(value = typography.lineSeedBold20, content = content)
+    }
 }

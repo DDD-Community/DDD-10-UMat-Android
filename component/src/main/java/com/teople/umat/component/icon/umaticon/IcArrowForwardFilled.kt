@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.teople.umat.component.icon.UmatIcon
 
-public val UmatIcon.IcArrowForwardOutlined: ImageVector
+public val UmatIcon.IcArrowForwardFilled: ImageVector
     get() {
-        if (_icArrowForwardOutlined != null) {
-            return _icArrowForwardOutlined!!
+        if (_icArrowForwardFilled != null) {
+            return _icArrowForwardFilled!!
         }
-        _icArrowForwardOutlined = Builder(name = "IcArrowForwardOutlined", defaultWidth = 24.0.dp,
+        _icArrowForwardFilled = Builder(name = "IcArrowForwardFilled", defaultWidth = 24.0.dp,
                 defaultHeight = 24.0.dp, viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
             path(fill = SolidColor(Color(0xFF111827)), stroke = null, strokeLineWidth = 0.0f,
                     strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
@@ -48,7 +48,7 @@ public val UmatIcon.IcArrowForwardOutlined: ImageVector
             }
         }
         .build()
-        return _icArrowForwardOutlined!!
+        return _icArrowForwardFilled!!
     }
 
-private var _icArrowForwardOutlined: ImageVector? = null
+private var _icArrowForwardFilled: ImageVector? = null
