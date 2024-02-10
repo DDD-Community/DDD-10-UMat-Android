@@ -18,11 +18,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush.Companion.horizontalGradient
@@ -34,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -44,6 +48,8 @@ import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.Gray950
 import com.teople.umat.component.widget.ComponentButton
+import com.teople.umat.component.widget.component.UmatTextField
+import com.teople.umat.component.widget.component.UmatTextFieldDefaults
 import com.teople.umat.component.R as ComponentR
 
 @Composable
@@ -112,10 +118,44 @@ fun OnBoardingScreen() {
             content = {
                 SocialLoginScreen(
                     onNavigateToSocialLogin = {
-                        navController.navigate(OnBoardingScreens.Connect.name)
+                        navController.navigate(OnBoardingScreens.Nickname.name)
                     }
                 )
             })
+        composable(
+            route = OnBoardingScreens.Nickname.name,
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+        ) {
+            NicknameScreen(
+                navController = navController,
+                onNavigateToConnect = {
+                    navController.navigate(OnBoardingScreens.Connect.name)
+                }
+            )
+        }
         composable(
             route = OnBoardingScreens.Connect.name,
             enterTransition = {
@@ -143,7 +183,46 @@ fun OnBoardingScreen() {
                 )
             },
         ) {
-            ConnectScreen()
+            ConnectScreen(
+                navController = navController,
+                onClickInputCode = {
+                    navController.navigate(OnBoardingScreens.CodeInput.name)
+                },
+                onClickConnect = {
+                    TODO("상대방이 입력 후 연결하는 로직")
+                }
+            )
+        }
+        composable(
+            route = OnBoardingScreens.CodeInput.name,
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(300)
+                )
+            },
+        ) {
+            CodeInputScreen(
+                navController = navController
+            )
         }
     }
 }
@@ -343,18 +422,24 @@ fun NicknameScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConnectScreen() {
+fun ConnectScreen(
+    onClickInputCode: () -> Unit = {},
+    onClickConnect: () -> Unit = {},
+    navController: NavHostController? = null
+) {
     Surface {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text(text = "") },
                     navigationIcon = {
-                        Icon(
-                            painter = painterResource(id = ComponentR.drawable.ic_back),
-                            contentDescription = "Back",
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
+                        IconButton(onClick = { navController?.navigateUp() }) {
+                            Icon(
+                                painter = painterResource(id = ComponentR.drawable.ic_back),
+                                contentDescription = "Back",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
                     }
                 )
             }
@@ -414,24 +499,26 @@ fun ConnectScreen() {
                         modifier = Modifier.align(alignment = Alignment.Center)
                     )
                 }
-                ComponentButton(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 80.dp)
-                    .height(50.dp),
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 80.dp)
+                        .height(50.dp),
                     backgroundColor = Gray800,
                     text = "상대방이 코드를 입력했어요",
                     textColor = Color.White,
-                    onClick = { /*TODO*/ }
+                    onClick = onClickConnect
                 )
-                ComponentButton(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .height(50.dp)
-                    .border(1.dp, Gray300, shape = RoundedCornerShape(8.dp)),
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .height(50.dp)
+                        .border(1.dp, Gray300, shape = RoundedCornerShape(8.dp)),
                     backgroundColor = Color.White,
                     text = "상대방 코드 입력",
                     textColor = Gray800,
-                    onClick = { /*TODO*/ }
+                    onClick = onClickInputCode
                 )
             }
         }
