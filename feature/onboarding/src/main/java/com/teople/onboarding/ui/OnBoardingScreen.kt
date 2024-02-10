@@ -54,41 +54,31 @@ fun OnBoardingScreen() {
     val navController = rememberNavController()
     val viewModel = OnBoardingViewModel(navController = navController)
     NavHost(navController = navController, startDestination = "guide") {
-        composable(
-            route = OnBoardingScreens.Guide.name,
-            enterTransition = { UmatTransition.slideEnterHorizontally() },
-            exitTransition = { UmatTransition.slideExitHorizontally() },
-            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
-            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
-            content = { GuideScreen(viewModel = viewModel) })
-        composable(
-            route = OnBoardingScreens.SocialLogin.name,
-            enterTransition = { UmatTransition.slideEnterHorizontally() },
-            exitTransition = { UmatTransition.slideExitHorizontally() },
-            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
-            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
-            content = { SocialLoginScreen(viewModel = viewModel) })
-        composable(
-            route = OnBoardingScreens.Nickname.name,
-            enterTransition = { UmatTransition.slideEnterHorizontally() },
-            exitTransition = { UmatTransition.slideExitHorizontally() },
-            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
-            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
-            content = { NicknameScreen(viewModel = viewModel) })
-        composable(
-            route = OnBoardingScreens.Connect.name,
-            enterTransition = { UmatTransition.slideEnterHorizontally() },
-            exitTransition = { UmatTransition.slideExitHorizontally() },
-            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
-            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
-            content = { ConnectScreen(viewModel = viewModel) })
-        composable(
-            route = OnBoardingScreens.InviteCode.name,
-            enterTransition = { UmatTransition.slideEnterHorizontally() },
-            exitTransition = { UmatTransition.slideExitHorizontally() },
-            popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
-            popExitTransition = { UmatTransition.slidePopExitHorizontally() },
-            content = { CodeInputScreen(viewModel = viewModel) })
+        OnBoardingScreens.entries.forEach { screen ->
+            composable(
+                route = screen.name,
+                enterTransition = { UmatTransition.slideEnterHorizontally() },
+                exitTransition = { UmatTransition.slideExitHorizontally() },
+                popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+                popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            ) {
+                createScreen(screen, viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun createScreen(
+    screen: OnBoardingScreens,
+    viewModel: OnBoardingViewModel
+) {
+    when (screen) {
+        OnBoardingScreens.Guide -> GuideScreen(viewModel)
+        OnBoardingScreens.SocialLogin -> SocialLoginScreen(viewModel)
+        OnBoardingScreens.Nickname -> NicknameScreen(viewModel)
+        OnBoardingScreens.Connect -> ConnectScreen(viewModel)
+        OnBoardingScreens.InviteCode -> CodeInputScreen(viewModel)
     }
 }
 
@@ -461,7 +451,7 @@ fun CodeInputScreen(
     }
 }
 
-enum class OnBoardingScreens() {
+enum class OnBoardingScreens {
     Guide, SocialLogin, Nickname, Connect, InviteCode
 }
 
