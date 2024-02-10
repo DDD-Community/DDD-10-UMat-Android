@@ -1,8 +1,5 @@
 package com.teople.onboarding.ui
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,11 +15,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush.Companion.horizontalGradient
@@ -44,113 +44,47 @@ import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.Gray950
 import com.teople.umat.component.widget.ComponentButton
+import com.teople.umat.component.widget.component.UmatTextField
+import com.teople.umat.component.widget.component.UmatTextFieldDefaults
+import com.teople.umat.component.widget.component.UmatTransition
 import com.teople.umat.component.R as ComponentR
 
 @Composable
 fun OnBoardingScreen() {
     val navController = rememberNavController()
+    val viewModel = OnBoardingViewModel(navController = navController)
     NavHost(navController = navController, startDestination = "guide") {
-        composable(
-            route = OnBoardingScreens.Guide.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            content = {
-                GuideScreen(
-                    onNavigateToSocialLogin = {
-                        navController.navigate(OnBoardingScreens.SocialLogin.name)
-                    }
-                )
-            })
-        composable(
-            route = OnBoardingScreens.SocialLogin.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            content = {
-                SocialLoginScreen(
-                    onNavigateToSocialLogin = {
-                        navController.navigate(OnBoardingScreens.Connect.name)
-                    }
-                )
-            })
-        composable(
-            route = OnBoardingScreens.Connect.name,
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(300)
-                )
-            },
-        ) {
-            ConnectScreen()
+        OnBoardingScreens.entries.forEach { screen ->
+            composable(
+                route = screen.name,
+                enterTransition = { UmatTransition.slideEnterHorizontally() },
+                exitTransition = { UmatTransition.slideExitHorizontally() },
+                popEnterTransition = { UmatTransition.slidePopEnterHorizontally() },
+                popExitTransition = { UmatTransition.slidePopExitHorizontally() },
+            ) {
+                createScreen(screen, viewModel)
+            }
         }
     }
 }
 
 @Composable
+fun createScreen(
+    screen: OnBoardingScreens,
+    viewModel: OnBoardingViewModel
+) {
+    when (screen) {
+        OnBoardingScreens.Guide -> GuideScreen(viewModel)
+        OnBoardingScreens.SocialLogin -> SocialLoginScreen(viewModel)
+        OnBoardingScreens.Nickname -> NicknameScreen(viewModel)
+        OnBoardingScreens.Connect -> ConnectScreen(viewModel)
+        OnBoardingScreens.InviteCode -> CodeInputScreen(viewModel)
+    }
+}
+
+@Composable
 fun GuideScreen(
-    onNavigateToSocialLogin: () -> Unit = {}
+    viewModel: OnBoardingViewModel
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
@@ -175,7 +109,7 @@ fun GuideScreen(
                 backgroundColor = Gray800,
                 text = "다음",
                 textColor = Color.White,
-                onClick = onNavigateToSocialLogin
+                onClick = { viewModel.navigateToSocialLogin() }
             )
         }
     }
@@ -183,7 +117,7 @@ fun GuideScreen(
 
 @Composable
 fun SocialLoginScreen(
-    onNavigateToSocialLogin: () -> Unit = {}
+    viewModel: OnBoardingViewModel
 ) {
     Surface {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -209,7 +143,7 @@ fun SocialLoginScreen(
                     backgroundColor = Color(0xFFFEE500),
                     text = "카카오로 로그인",
                     textColor = Color(0xFF3C3922),
-                    onClick = onNavigateToSocialLogin,
+                    onClick = { viewModel.navigateToNickName() },
                     icon = {
                         Icon(
                             painter = painterResource(id = ComponentR.drawable.ic_kakao),
@@ -227,7 +161,7 @@ fun SocialLoginScreen(
                     backgroundColor = Gray950,
                     text = "Apple로 로그인",
                     textColor = Color.White,
-                    onClick = onNavigateToSocialLogin,
+                    onClick = { viewModel.navigateToNickName() },
                     icon = {
                         Icon(
                             painter = painterResource(id = ComponentR.drawable.ic_apple),
@@ -238,7 +172,7 @@ fun SocialLoginScreen(
                     }
                 )
                 Button(
-                    onClick = onNavigateToSocialLogin,
+                    onClick = { viewModel.navigateToNickName() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
@@ -274,18 +208,89 @@ fun SocialLoginScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConnectScreen() {
+fun NicknameScreen(
+    viewModel: OnBoardingViewModel,
+) {
+    val textFieldValue by viewModel.nickNameTextFieldValue.collectAsState()
+    val isButtonEnabled by viewModel.isButtonEnabled.collectAsState()
     Surface {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text(text = "") },
                     navigationIcon = {
-                        Icon(
-                            painter = painterResource(id = ComponentR.drawable.ic_back),
-                            contentDescription = "Back",
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
+                        IconButton(onClick = { viewModel.navigateToUp() }) {
+                            Icon(
+                                painter = painterResource(id = ComponentR.drawable.ic_back),
+                                contentDescription = "Back",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp)
+            ) {
+                Text(
+                    text = "서비스에 표시될\n이름을 적어주세요",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Gray900
+                    ),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .padding(bottom = 32.dp)
+                )
+
+                UmatTextField(
+                    fieldText = textFieldValue,
+                    topLabel = "내가 불리게 될 닉네임을 적어주세요",
+                    supportLabel = "6자 이내, 한글로만 가능해요!",
+                    style = UmatTextFieldDefaults.default(),
+                    onValueChange = { newValue ->
+                        viewModel.onTextFieldValueChange(newValue)
+                    }
+                )
+
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 114.dp)
+                        .height(50.dp),
+                    backgroundColor = Gray800,
+                    text = "다음",
+                    textColor = Color.White,
+                    onClick = { viewModel.navigateToConnect() },
+                    enabled = isButtonEnabled
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConnectScreen(
+    viewModel: OnBoardingViewModel,
+) {
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "") },
+                    navigationIcon = {
+                        IconButton(onClick = { viewModel.navigateToUp() }) {
+                            Icon(
+                                painter = painterResource(id = ComponentR.drawable.ic_back),
+                                contentDescription = "Back",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
                     }
                 )
             }
@@ -345,48 +350,137 @@ fun ConnectScreen() {
                         modifier = Modifier.align(alignment = Alignment.Center)
                     )
                 }
-                ComponentButton(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 80.dp)
-                    .height(50.dp),
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 80.dp)
+                        .height(50.dp),
                     backgroundColor = Gray800,
                     text = "상대방이 코드를 입력했어요",
                     textColor = Color.White,
-                    onClick = { /*TODO*/ }
+                    onClick = { viewModel.onClickConnect() }
                 )
-                ComponentButton(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .height(50.dp)
-                    .border(1.dp, Gray300, shape = RoundedCornerShape(8.dp)),
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .height(50.dp)
+                        .border(1.dp, Gray300, shape = RoundedCornerShape(8.dp)),
                     backgroundColor = Color.White,
                     text = "상대방 코드 입력",
                     textColor = Gray800,
-                    onClick = { /*TODO*/ }
+                    onClick = { viewModel.navigateToInviteCode() }
                 )
             }
         }
     }
 }
 
-enum class OnBoardingScreens() {
-    Guide, SocialLogin, Connect
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CodeInputScreen(
+    viewModel: OnBoardingViewModel
+) {
+    val textFieldValue by viewModel.inviteCodeTextFieldValue.collectAsState()
+    val isInvitedCodeValid by viewModel.isInviteCodeValid.collectAsState()
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "") },
+                    navigationIcon = {
+                        IconButton(onClick = { viewModel.navigateToUp() }) {
+                            Icon(
+                                painter = painterResource(id = ComponentR.drawable.ic_back),
+                                contentDescription = "Back",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp)
+            ) {
+                Text(
+                    text = "커플 연결 후 시작하기",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Gray900
+                    ),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                )
+                Text(
+                    text = "커플 연결 후 시작하기",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Gray500
+                    ),
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .padding(bottom = 32.dp)
+                )
+                UmatTextField(
+                    fieldText = textFieldValue,
+                    topLabel = "초대 코드 붙여넣기",
+                    supportLabel = if (isInvitedCodeValid) "" else "코드 입력이 잘못되었어요!",
+                    style = UmatTextFieldDefaults.default(),
+                    onValueChange = { newValue ->
+                        viewModel.onInviteCodeTextFieldValueChange(newValue)
+                    }
+                )
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 114.dp)
+                        .height(50.dp),
+                    backgroundColor = Gray800,
+                    text = "입력 완료",
+                    textColor = Color.White,
+                    onClick = { viewModel.navigateToMain() },
+                    enabled = isInvitedCodeValid
+                )
+            }
+        }
+    }
+}
+
+enum class OnBoardingScreens {
+    Guide, SocialLogin, Nickname, Connect, InviteCode
 }
 
 @Preview(heightDp = 640, widthDp = 360)
 @Composable
 fun OnBoardingView() {
-    GuideScreen()
+    GuideScreen(OnBoardingViewModel(navController = rememberNavController()))
 }
 
 @Preview(heightDp = 640, widthDp = 360)
 @Composable
 fun SocialLoginView() {
-    SocialLoginScreen()
+    SocialLoginScreen(OnBoardingViewModel(navController = rememberNavController()))
+}
+
+@Preview(heightDp = 640, widthDp = 360)
+@Composable
+fun NicknameView() {
+    NicknameScreen(OnBoardingViewModel(navController = rememberNavController()))
 }
 
 @Preview(heightDp = 640, widthDp = 360)
 @Composable
 fun ConnectView() {
-    ConnectScreen()
+    ConnectScreen(OnBoardingViewModel(navController = rememberNavController()))
+}
+
+@Preview(heightDp = 640, widthDp = 360)
+@Composable
+fun CodeInputView() {
+    CodeInputScreen(OnBoardingViewModel(navController = rememberNavController()))
 }
