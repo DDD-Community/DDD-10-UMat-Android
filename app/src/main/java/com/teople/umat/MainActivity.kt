@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,10 +18,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,7 +64,15 @@ class MainActivity : ComponentActivity() {
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_API_KEY)
         setContent {
             UmatTheme {
+                var showDialog by remember { mutableStateOf(true) }
                 MainScreen()
+                if (showDialog) {
+                    CustomDialog(
+                        onDismissRequest = {
+                            showDialog = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -98,9 +109,9 @@ class MainActivity : ComponentActivity() {
         val navStackBackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navStackBackEntry?.destination
 
+        Divider(color = Gray300)
         Row(
             modifier = Modifier
-                .border(1.dp, Gray300)
                 .background(Color.Transparent)
                 .fillMaxWidth()
                 .height(80.dp),
