@@ -4,7 +4,6 @@ import MypageIcon
 import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +33,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -44,14 +42,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcArrowForwardFilled
 import com.teople.umat.component.icon.umaticon.IcSettingsOutlined
+import com.teople.umat.component.ui.theme.Blue500
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray500
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.Gray900
+import com.teople.umat.component.ui.theme.Orange500
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.widget.ComponentButton
 import com.teople.umat.component.widget.component.UmatAppBar
+import com.teople.umat.component.widget.component.UmatBadge
+import com.teople.umat.component.widget.component.UmatBadgeDefaults
 import mypageicon.IcHeartFilled
 import mypageicon.IcProfileUserOrangeFilled
 
@@ -141,7 +143,9 @@ private fun MypageHeaderSection() {
                 style = UmatTheme.typography.pretendardSemiBold14
             )
 
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = "내 닉네임",
                     color = Gray900,
@@ -249,6 +253,10 @@ private fun MypageSummarySectionRow(
         )
 
         Text(
+            modifier = Modifier
+                .padding(
+                    vertical = 6.dp
+                ),
             text = stringResource(
                 id = R.string.mypage_summary_wanted_count,
                 count
@@ -407,26 +415,18 @@ private fun MypageAllergySectionRow(
             )
         ) {
             items(allergies) { item ->
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            end = 4.dp
-                        )
-                        .background(
-                            color = if (isMine) {
-                                Color(0xFFFF5B0A)
-                            } else {
-                                Color(0xFF6366F1)
-                            },
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 4.dp
-                        ),
-                    text = item,
-                    color = Color.White,
-                    style = UmatTheme.typography.pretendardSemiBold12
+                UmatBadge(
+                    title = item,
+                    style = UmatBadgeDefaults.Filled(
+                        backgroundColor = if (isMine) {
+                            Orange500
+                        } else {
+                            Blue500
+                        }
+                    ),
+                    paddingValues = PaddingValues(
+                        end = 4.dp
+                    )
                 )
             }
         }
