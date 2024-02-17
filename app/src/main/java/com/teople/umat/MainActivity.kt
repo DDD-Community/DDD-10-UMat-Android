@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 var showDialog by remember { mutableStateOf(true) }
                 MainScreen()
                 if (showDialog) {
-                    CustomDialog(
+                    GuideDialog(
                         onDismissRequest = {
                             showDialog = false
                         }
@@ -109,12 +110,13 @@ class MainActivity : ComponentActivity() {
         val navStackBackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navStackBackEntry?.destination
 
-        Divider(color = Gray300)
+        Divider(color = Gray300, modifier = Modifier.zIndex(3f))
         Row(
             modifier = Modifier
-                .background(Color.Transparent)
+                .background(Color.White)
                 .fillMaxWidth()
-                .height(80.dp),
+                .height(80.dp)
+                .zIndex(2f),
         ) {
             BottomNavButton(
                 screen = BottomNavItem.Home,
