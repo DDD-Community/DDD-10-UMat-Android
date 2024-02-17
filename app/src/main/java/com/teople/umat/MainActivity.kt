@@ -60,6 +60,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        enableEdgeToEdge()
+
         super.onCreate(savedInstanceState)
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_API_KEY)
@@ -82,14 +85,20 @@ class MainActivity : ComponentActivity() {
     fun MainScreen() {
         val navController = rememberNavController()
         Scaffold(
+            // enableEdgeToEdge 로 인한 바텀 네비게이션 영역 패딩 필요
+            modifier = Modifier.navigationBarsPadding(),
             bottomBar = {
                 UmatBottomBar(navController = navController)
-            }
+            },
         ) { innerPadding ->
             NavHost(
+                modifier = Modifier
+                    .padding(
+                        // 탭 스크린 내부 UI 패딩 필요
+                        bottom = innerPadding.calculateBottomPadding()
+                    ),
                 navController = navController,
                 startDestination = BottomNavItem.Home.screenRoute,
-                Modifier.padding(innerPadding)
             ) {
                 composable(BottomNavItem.Home.screenRoute) {
                     HomeScreen()

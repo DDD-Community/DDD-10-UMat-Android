@@ -47,9 +47,15 @@ fun UmatAppBar(
     title: @Composable (() -> Unit)? = null,
     navigation: @Composable (() -> Unit)? = null,
     action: @Composable (() -> Unit)? = null,
+    isStatusBarPadding: Boolean = true
 ) {
+    val modifier = when (isStatusBarPadding) {
+        true -> Modifier.statusBarsPadding()
+        false -> Modifier
+    }
+
     UmatTopAppBarLayout(
-        modifier = Modifier,
+        modifier = modifier,
         backgroundColor = backgroundColor,
         contentColor = contentColor
     ) {
