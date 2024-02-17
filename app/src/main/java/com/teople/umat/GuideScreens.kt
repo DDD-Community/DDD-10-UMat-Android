@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,9 +35,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import com.teople.umat.component.R
+import com.teople.umat.component.ui.theme.Both
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray500
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.widget.component.UmatBadge
+import com.teople.umat.component.widget.component.UmatBadgeDefaults
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -90,7 +94,14 @@ fun GuideDialog(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            // TODO : Badge
+                            UmatBadge(
+                                title = "Step ${page + 1}", style = UmatBadgeDefaults.Filled(
+                                    backgroundColor = Both
+                                ),
+                                paddingValues = PaddingValues(
+                                    end = 6.dp
+                                )
+                            )
                             Text(
                                 text = text,
                                 style = UmatTypography().pretendardSemiBold14
