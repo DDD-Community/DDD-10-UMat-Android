@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,10 +18,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -61,7 +65,15 @@ class MainActivity : ComponentActivity() {
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_API_KEY)
         setContent {
             UmatTheme {
+                var showDialog by remember { mutableStateOf(true) }
                 MainScreen()
+                if (showDialog) {
+                    GuideDialog(
+                        onDismissRequest = {
+                            showDialog = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -98,12 +110,13 @@ class MainActivity : ComponentActivity() {
         val navStackBackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navStackBackEntry?.destination
 
+        Divider(color = Gray300, modifier = Modifier.zIndex(3f))
         Row(
             modifier = Modifier
-                .border(1.dp, Gray300)
-                .background(Color.Transparent)
+                .background(Color.White)
                 .fillMaxWidth()
-                .height(80.dp),
+                .height(80.dp)
+                .zIndex(2f),
         ) {
             BottomNavButton(
                 screen = BottomNavItem.Home,

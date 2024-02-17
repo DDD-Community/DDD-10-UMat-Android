@@ -1,6 +1,5 @@
-package mypageicon
+package com.teople.umat.component.icon.umaticon
 
-import MypageIcon
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType.Companion.EvenOdd
 import androidx.compose.ui.graphics.SolidColor
@@ -10,18 +9,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.ImageVector.Builder
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
+import com.teople.umat.component.icon.UmatIcon
 
-public val MypageIcon.IcProfileUserPurpleFilled: ImageVector
+public val UmatIcon.IcProfileUserOrangeFilled: ImageVector
     get() {
-        if (_icProfileUserPurpleFilled != null) {
-            return _icProfileUserPurpleFilled!!
+        if (_icProfileUserOrangeFilled != null) {
+            return _icProfileUserOrangeFilled!!
         }
-        _icProfileUserPurpleFilled = Builder(name = "IcProfileUserPurpleFilled", defaultWidth =
-                24.0.dp, defaultHeight = 24.0.dp, viewportWidth = 24.0f, viewportHeight =
-                24.0f).apply {
-            path(fill = SolidColor(Color(0xFF6366F1)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = EvenOdd) {
+        _icProfileUserOrangeFilled = Builder(
+            name = "IcProfileUserOrangeFilled", defaultWidth =
+            24.0.dp, defaultHeight = 24.0.dp, viewportWidth = 24.0f, viewportHeight =
+            24.0f
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFFFF5B0A)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = EvenOdd
+            ) {
                 moveTo(21.9981f, 10.393f)
                 curveTo(22.0631f, 7.501f, 20.5891f, 5.022f, 18.4941f, 3.801f)
                 curveTo(16.5341f, 2.659f, 14.0721f, 2.653f, 12.0001f, 4.338f)
@@ -36,8 +40,8 @@ public val MypageIcon.IcProfileUserPurpleFilled: ImageVector
                 close()
             }
         }
-        .build()
-        return _icProfileUserPurpleFilled!!
+            .build()
+        return com.teople.umat.component.icon.umaticon._icProfileUserOrangeFilled!!
     }
 
-private var _icProfileUserPurpleFilled: ImageVector? = null
+private var _icProfileUserOrangeFilled: ImageVector? = null
