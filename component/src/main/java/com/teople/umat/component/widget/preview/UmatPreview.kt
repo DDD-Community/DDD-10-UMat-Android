@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.teople.umat.component.ui.theme.Black
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.White
@@ -16,6 +17,10 @@ import com.teople.umat.component.ui.theme.White
  */
 @Composable
 fun UmatPreview(
+    backgroundColor: Color = when (isSystemInDarkTheme()) {
+        true -> Black
+        false -> White
+    },
     content: @Composable (BoxScope.() -> Unit)
 ) {
     UmatTheme {
@@ -23,10 +28,7 @@ fun UmatPreview(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = when (isSystemInDarkTheme()) {
-                        true -> Black
-                        false -> White
-                    }
+                    color = backgroundColor
                 ),
             content = content
         )
