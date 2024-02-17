@@ -1,10 +1,9 @@
 package com.teople.umat
 
 import android.view.Gravity
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,25 +12,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -39,11 +35,13 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import com.teople.umat.component.R
 import com.teople.umat.component.ui.theme.Gray300
+import com.teople.umat.component.ui.theme.Gray500
 import com.teople.umat.component.ui.theme.UmatTypography
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CustomDialog(
+fun GuideDialog(
     onDismissRequest: () -> Unit = { }
 ) {
     Dialog(
@@ -56,110 +54,92 @@ fun CustomDialog(
         dialogWindowProvider.window.setGravity(Gravity.BOTTOM)
         dialogWindowProvider.window.setDimAmount(0f)
 
-        var expanded by remember { mutableStateOf(false) }
-
-        val widthState by animateDpAsState(
-            targetValue = if (expanded) 650.dp else 340.dp,
-            animationSpec = tween(durationMillis = 1000)
+        val imageTextPairs = listOf(
+            Pair(R.drawable.temp, "지도앱에서 공유하기 누르기"),
+            Pair(R.drawable.temp, "가고싶은 장소의 링크를 복사"),
+            Pair(R.drawable.temp, "복사된 링크를 맛나에 붙여넣으면 저장 완료!")
         )
 
         Surface(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             color = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(widthState)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "연인과 가고싶은 곳을 추가해볼까요?",
-                    style = UmatTypography().pretendardSemiBold18,
+                    text = "맛나에 가고 싶은 장소 추가하는 방법",
+                    style = UmatTypography().lineSeedBold20,
                     modifier = Modifier.padding(top = 46.dp)
                 )
-                Box(
+                val pagerState = rememberPagerState(pageCount = {
+                    3
+                })
+                HorizontalPager(
+                    state = pagerState,
                     modifier = Modifier
                         .padding(top = 12.dp)
-                        .padding(horizontal = 40.dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
+                        .fillMaxWidth(),
+
+                    ) { page ->
+                    val (imageRes, text) = imageTextPairs[page]
+                    Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            // TODO : Badge
+                            Text(
+                                text = text,
+                                style = UmatTypography().pretendardSemiBold14
+                            )
+                        }
                         Image(
-                            painter = painterResource(id = R.drawable.ic_naver_map),
+                            painter = painterResource(id = imageRes),
                             contentDescription = null,
                             modifier = Modifier
-                                .padding(end = 42.dp)
-                                .size(55.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_kakao_map),
-                            contentDescription = null,
-                            modifier = Modifier.size(55.dp)
+                                .padding(top = 22.dp)
+                                .padding(horizontal = 48.dp)
+                                .fillMaxWidth(),
+                            contentScale = ContentScale.FillWidth
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_share),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(top = 6.dp)
-                            .size(67.dp)
-                            .align(Alignment.TopCenter)
-                    )
                 }
-                val guideText = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color(0xFFA855F7),
-                            fontSize = UmatTypography().pretendardSemiBold14.fontSize,
-                            fontWeight = UmatTypography().pretendardSemiBold14.fontWeight
-                        )
-                    ) {
-                        append("지도앱 공유하기")
-                    }
-                    append("로 쉽게 추가해보세요!")
-                }
-                Text(
-                    text = guideText,
-                    style = UmatTypography().pretendardSemiBold14,
-                    modifier = Modifier.padding(top = 18.dp)
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .width(126.dp)
-                        .height(40.dp)
-                        .align(alignment = Alignment.CenterHorizontally)
-                        .border(
-                            width = 1.dp,
-                            color = Gray300,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .clickable {
-                            expanded = true
-                        }
+                Row(
+                    Modifier
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                        .padding(top = 28.dp),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "자세히 알아보기", style = UmatTypography().pretendardSemiBold14,
-                        modifier = Modifier.align(alignment = Alignment.Center)
-                    )
+                    repeat(pagerState.pageCount) { iteration ->
+                        val color =
+                            if (pagerState.currentPage == iteration) Gray500 else Gray300
+                        Box(
+                            modifier = Modifier
+                                .padding(3.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(color)
+                                .width(28.dp)
+                                .height(6.dp)
+                        )
+                    }
                 }
+
                 Divider(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
-                        .padding(top = 24.dp),
+                        .padding(top = 32.dp),
                     color = Gray300
                 )
                 Text(
                     text = "닫기",
                     style = UmatTypography().pretendardSemiBold14,
                     modifier = Modifier
-                        .padding(top = 16.dp)
+                        .padding(top = 16.dp, bottom = 24.dp)
                         .clickable {
                             onDismissRequest()
                         }
@@ -174,5 +154,5 @@ fun CustomDialog(
 @Preview
 @Composable
 fun GuideDialog() {
-    CustomDialog()
+    GuideDialog()
 }
