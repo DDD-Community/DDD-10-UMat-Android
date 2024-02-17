@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcArrowForwardFilled
+import com.teople.umat.component.icon.umaticon.IcProfileUserOrangeFilled
 import com.teople.umat.component.icon.umaticon.IcSettingsOutlined
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
@@ -53,7 +54,6 @@ import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.widget.ComponentButton
 import com.teople.umat.component.widget.component.UmatAppBar
 import mypageicon.IcHeartFilled
-import mypageicon.IcProfileUserOrangeFilled
 
 @Composable
 fun MypageScreen(
@@ -122,7 +122,7 @@ private fun MypageHeaderSection() {
             Image(
                 modifier = Modifier.size(80.dp),
                 contentScale = ContentScale.FillWidth,
-                imageVector = MypageIcon.IcProfileUserOrangeFilled,
+                imageVector = UmatIcon.IcProfileUserOrangeFilled,
                 contentDescription = null
             )
 
