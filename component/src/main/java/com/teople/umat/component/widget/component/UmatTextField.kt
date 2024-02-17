@@ -26,7 +26,7 @@ fun UmatTextField(
     onValueChange: (String) -> Unit,
 ) {
     TextField(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxWidth(),
         // 상단 라벨
         label = {
             Text(
