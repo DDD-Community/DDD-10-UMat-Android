@@ -85,6 +85,8 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.bundles.naverMap)
 
+    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.bundles.coroutines)
 
     implementation(libs.hilt.android)
