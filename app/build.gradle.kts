@@ -73,8 +73,10 @@ dependencies {
     implementation(project(":feature:daily"))
     implementation(project(":feature:mypage"))
     implementation(project(":feature:onboarding"))
+    implementation(project(":feature:search"))
     implementation(project(":core:data"))
     implementation(project(":component"))
+    implementation(project(":navigator"))
 
     // Compose
     implementation(platform(libs.compose.bom))
