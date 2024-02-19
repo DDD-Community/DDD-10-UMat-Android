@@ -3,6 +3,7 @@ package com.teople.umat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -24,7 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +44,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.naver.maps.map.NaverMapSdk
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcAddFilled
 import com.teople.umat.component.icon.umaticon.IcHomeOutlined
@@ -60,20 +61,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        enableEdgeToEdge()
+
         super.onCreate(savedInstanceState)
-        NaverMapSdk.getInstance(this).client =
-            NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_API_KEY)
         setContent {
             UmatTheme {
-                var showDialog by remember { mutableStateOf(true) }
                 MainScreen()
-                if (showDialog) {
-                    GuideDialog(
-                        onDismissRequest = {
-                            showDialog = false
-                        }
-                    )
-                }
             }
         }
     }
@@ -81,15 +75,23 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen() {
         val navController = rememberNavController()
+        var showDialog by rememberSaveable { mutableStateOf(true) }
+
         Scaffold(
+            // enableEdgeToEdge 로 인한 바텀 네비게이션 영역 패딩 필요
+            modifier = Modifier.navigationBarsPadding(),
             bottomBar = {
                 UmatBottomBar(navController = navController)
-            }
+            },
         ) { innerPadding ->
             NavHost(
+                modifier = Modifier
+                    .padding(
+                        // 탭 스크린 내부 UI 패딩 필요
+                        bottom = innerPadding.calculateBottomPadding()
+                    ),
                 navController = navController,
                 startDestination = BottomNavItem.Home.screenRoute,
-                Modifier.padding(innerPadding)
             ) {
                 composable(BottomNavItem.Home.screenRoute) {
                     HomeScreen()
@@ -100,6 +102,14 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+
+        if (showDialog) {
+            GuideDialog(
+                onDismissRequest = {
+                    showDialog = false
+                }
+            )
         }
     }
 
@@ -117,13 +127,17 @@ class MainActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .height(80.dp)
                 .zIndex(2f),
+            verticalAlignment = Alignment.Top
         ) {
             BottomNavButton(
                 screen = BottomNavItem.Home,
                 currentDestination = currentDestination,
                 navController = navController
             )
-            IconButton(onClick = { TODO("장소 추가 구현") }) {
+            IconButton(
+                modifier = Modifier.weight(1f),
+                onClick = { TODO("장소 추가 구현") }
+            ) {
                 Icon(
                     imageVector = UmatIcon.IcAddFilled,
                     contentDescription = "icon",
@@ -157,9 +171,11 @@ class MainActivity : ComponentActivity() {
                 .weight(1f)
                 .clickable(
                     onClick = {
-                        navController.navigate(screen.screenRoute) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                            launchSingleTop = true
+                        if (!selected) {
+                            navController.navigate(screen.screenRoute) {
+                                popUpTo(navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
                         }
                     })
         ) {

@@ -4,6 +4,7 @@ import MypageIcon
 import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -81,6 +83,10 @@ fun MypageScreen(
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    color = UmatTheme.colorScheme.background
+                )
                 .padding(paddingValues)
                 .verticalScroll(
                     state = rememberScrollState()
@@ -91,14 +97,6 @@ fun MypageScreen(
 
             // 요약
             MypageSummarySection()
-
-            // 내 알레르기
-            MypageAllergySection(
-                isInitialized = false,
-                actionRegister = {
-                    // 알레르기 등록 액션
-                }
-            )
         }
     }
 }

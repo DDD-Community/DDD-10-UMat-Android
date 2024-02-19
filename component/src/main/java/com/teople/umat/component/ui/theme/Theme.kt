@@ -4,8 +4,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
  * Color, Typography 만 커스텀으로 별도 제공
@@ -45,8 +47,9 @@ fun UmatTheme(
     content: @Composable () -> Unit
 ) {
     // uiMode 에 따른 색상값 리턴
+    // FIXME 다크모드를 지원한다면 darkColors() 분기 추가
     val currentThemeColor = when {
-        darkTheme -> darkColors()
+        darkTheme -> colorScheme
         else -> colorScheme
     }
 
@@ -62,5 +65,21 @@ fun UmatTheme(
         LocalTypography provides typography
     ) {
         ProvideTextStyle(value = typography.lineSeedBold20, content = content)
+    }
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = !isSystemInDarkTheme()
+
+    LaunchedEffect(
+        key1 = systemUiController,
+        key2 = useDarkIcons
+    ) {
+        with(systemUiController) {
+            statusBarDarkContentEnabled = true
+            setNavigationBarColor(
+                color = rememberedColors.background,
+                darkIcons = useDarkIcons
+            )
+        }
     }
 }
