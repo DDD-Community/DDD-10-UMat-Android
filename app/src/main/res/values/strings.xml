@@ -2,4 +2,8 @@
     <string name="app_name">Umat</string>
     <string name="home">홈</string>
     <string name="my_page">마이페이지</string>
+    <string name="add_place">장소 추가</string>
+    <string name="share_by_map">지도앱에서 공유하기로 추가</string>
+    <string name="move_to_naver_map">네이버 지도 앱으로 이동합니다</string>
+    <string name="view_guide">방법 보기</string>
 </resources>

@@ -49,7 +49,7 @@ fun GuideDialog(
     onDismissRequest: () -> Unit = { }
 ) {
     Dialog(
-        onDismissRequest = { },
+        onDismissRequest = onDismissRequest,
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
         )
