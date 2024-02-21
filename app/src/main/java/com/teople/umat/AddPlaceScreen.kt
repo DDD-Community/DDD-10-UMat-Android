@@ -74,14 +74,14 @@ fun AddPlaceScreen(
             modifier = Modifier
                 .padding(top = 26.dp)
                 .padding(horizontal = 20.dp)
-                .fillMaxWidth()
-                .background(Both, RoundedCornerShape(8.dp))
-                .padding(vertical = 15.dp)
-                .padding(start = 18.dp)
                 .clickable {
                     onDismissRequest?.invoke()
                     addPlaceViewModel?.moveToNaverMap()
-                },
+                }
+                .fillMaxWidth()
+                .background(Both, RoundedCornerShape(8.dp))
+                .padding(vertical = 15.dp)
+                .padding(start = 18.dp),
         ) {
             Row {
                 Image(
@@ -114,10 +114,10 @@ fun AddPlaceScreen(
             modifier = Modifier
                 .padding(top = 10.dp)
                 .border(1.dp, Gray300, RoundedCornerShape(8.dp))
-                .padding(vertical = 10.dp, horizontal = 20.dp)
                 .clickable {
                     shouldShowGuide = true
                 }
+                .padding(vertical = 10.dp, horizontal = 20.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.view_guide),
