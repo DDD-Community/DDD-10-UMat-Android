@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                 navController = navController
             )
         }
-        if(shouldShowBottomSheet) {
+        if (shouldShowBottomSheet) {
             AddPlaceBottomSheet(
                 onDismissRequest = {
                     shouldShowBottomSheet = false
@@ -163,8 +163,6 @@ class MainActivity : ComponentActivity() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 14.dp)
-                .weight(1f)
                 .clickable(
                     onClick = {
                         navController.navigate(screen.screenRoute) {
@@ -172,6 +170,8 @@ class MainActivity : ComponentActivity() {
                             launchSingleTop = true
                         }
                     })
+                .padding(bottom = 14.dp)
+                .weight(1f)
         ) {
             Column(
                 modifier = Modifier
