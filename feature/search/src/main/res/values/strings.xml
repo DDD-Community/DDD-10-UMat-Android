@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="search_app_bar_hint">공간명 검색</string>
+    <string name="search_result_empty">검색된 장소가 없습니다</string>
+
+</resources>
