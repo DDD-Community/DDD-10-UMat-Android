@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -18,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,14 +42,20 @@ import com.teople.umat.component.ui.theme.UmatTheme
  */
 @Composable
 fun UmatAppBar(
-    backgroundColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    backgroundColor: Color = UmatTheme.colorScheme.background,
+    contentColor: Color = UmatTheme.colorScheme.onBackground,
     title: @Composable (() -> Unit)? = null,
     navigation: @Composable (() -> Unit)? = null,
     action: @Composable (() -> Unit)? = null,
+    isStatusBarPadding: Boolean = true
 ) {
+    val modifier = when (isStatusBarPadding) {
+        true -> Modifier.statusBarsPadding()
+        false -> Modifier
+    }
+
     UmatTopAppBarLayout(
-        modifier = Modifier,
+        modifier = modifier,
         backgroundColor = backgroundColor,
         contentColor = contentColor
     ) {

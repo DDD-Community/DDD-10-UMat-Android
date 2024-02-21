@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +42,7 @@ import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.feature.home.component.HomeSearchBar
 
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +54,7 @@ fun HomeScreen() {
         )
     )
     BottomSheetScaffold(
+        modifier = Modifier,
         sheetPeekHeight = 160.dp,
         sheetContent = {
             UmatBottomSheetScreen()
@@ -59,11 +62,17 @@ fun HomeScreen() {
         scaffoldState = scaffoldState,
         sheetContainerColor = Color.White
     ) {
-        NaverMap(
-            modifier = Modifier
-                .fillMaxSize()
-                .zIndex(0f)
-        )
+        Box {
+            // 지도
+            NaverMap(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zIndex(0f)
+            )
+
+            // 검색바
+            HomeSearchBar()
+        }
     }
 }
 

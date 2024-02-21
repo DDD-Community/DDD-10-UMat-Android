@@ -17,6 +17,7 @@ val White = Color(0xFFFFFFFF)
 val Error = Color(0xFFF43F5E)
 val Success = Color(0xFF3B82F6)
 val Both = Color(0xFFA855F7)
+val Transparent = Color(0x00FFFFFF)
 
 internal val Gradient = Brush.horizontalGradient(
     colors = listOf(
@@ -75,6 +76,9 @@ class UmatColors(
     reactionSoso: Color,
     reactionLike: Color,
     reactionNotGood: Color,
+    transparent: Color,
+    background: Color,
+    onBackground: Color,
     gradient: Brush,
     isLight: Boolean
 ) {
@@ -85,6 +89,12 @@ class UmatColors(
     var reactionLike by mutableStateOf(reactionLike)
         private set
     var reactionNotGood by mutableStateOf(reactionNotGood)
+        private set
+    var transparent by mutableStateOf(transparent)
+        private set
+    var background by mutableStateOf(background)
+        private set
+    var onBackground by mutableStateOf(onBackground)
         private set
     var gradient by mutableStateOf(gradient)
         internal set
@@ -97,6 +107,9 @@ class UmatColors(
         reactionSoso: Color = this.reactionSoso,
         reactionLike: Color = this.reactionLike,
         reactionNotGood: Color = this.reactionNotGood,
+        transparent: Color = this.transparent,
+        background: Color = this.background,
+        onBackground: Color = this.onBackground,
         gradient: Brush = this.gradient,
         isLight: Boolean = this.isLight
     ): UmatColors = UmatColors(
@@ -104,6 +117,9 @@ class UmatColors(
         reactionSoso = reactionSoso,
         reactionLike = reactionLike,
         reactionNotGood = reactionNotGood,
+        transparent = transparent,
+        background = background,
+        onBackground = onBackground,
         gradient = gradient,
         isLight = isLight
 
@@ -114,6 +130,9 @@ class UmatColors(
         reactionSoso = other.reactionSoso
         reactionLike = other.reactionLike
         reactionNotGood = other.reactionNotGood
+        transparent = other.transparent
+        background = other.background
+        onBackground = other.onBackground
         gradient = other.gradient
         isLight = other.isLight
     }
@@ -124,6 +143,9 @@ fun lightColors(): UmatColors = UmatColors(
     reactionSoso = ReactionSoso,
     reactionLike = ReactionLike,
     reactionNotGood = ReactionNotGood,
+    transparent = Transparent,
+    background = White,
+    onBackground = Black,
     gradient = Gradient,
     isLight = true
 )
@@ -133,6 +155,9 @@ fun darkColors(): UmatColors = UmatColors(
     reactionSoso = ReactionSoso,
     reactionLike = ReactionLike,
     reactionNotGood = ReactionNotGood,
+    transparent = Transparent,
+    background = Black,
+    onBackground = White,
     gradient = Gradient,
     isLight = false
 )

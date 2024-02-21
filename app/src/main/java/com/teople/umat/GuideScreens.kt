@@ -42,7 +42,9 @@ import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.component.widget.component.UmatBadge
 import com.teople.umat.component.widget.component.UmatBadgeDefaults
 
-
+/**
+ * FIXME Dialog 에서 StatusBar 아이콘 색상이 라이트/다크 모드에 따라 변경이 안됨
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GuideDialog(

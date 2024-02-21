@@ -25,6 +25,7 @@ naverMap = "3.17.0"
 naverMapCompose = "1.5.2"
 mapLocation = "21.0.1"
 naverMapLocation = "21.0.1"
+googleAppCompanist = "0.31.2-alpha"
 
 [libraries]
 # Android
@@ -64,6 +65,8 @@ roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = 
 roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 # coil
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+# Google
+google-appcompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "googleAppCompanist" }
 # naver map
 mapSdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "naverMap" }
 naverMapCompose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naverMapCompose" }
