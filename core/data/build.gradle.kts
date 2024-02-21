@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -8,6 +10,11 @@ plugins {
 android {
     namespace = "com.teople.umat.core.data"
     compileSdk = 34
+
+    val localProperties = Properties().apply {
+        load(project.rootProject.file("local.properties").inputStream())
+    }
+    val googleMapsApiKey = localProperties.getProperty("google_maps_api_key") ?: ""
 
     defaultConfig {
         minSdk = 24
@@ -24,6 +31,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -31,6 +41,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

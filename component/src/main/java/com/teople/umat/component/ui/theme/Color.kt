@@ -79,6 +79,7 @@ class UmatColors(
     transparent: Color,
     background: Color,
     onBackground: Color,
+    divider: Color,
     gradient: Brush,
     isLight: Boolean
 ) {
@@ -96,6 +97,8 @@ class UmatColors(
         private set
     var onBackground by mutableStateOf(onBackground)
         private set
+    var divider by mutableStateOf(divider)
+        private set
     var gradient by mutableStateOf(gradient)
         internal set
 
@@ -110,6 +113,7 @@ class UmatColors(
         transparent: Color = this.transparent,
         background: Color = this.background,
         onBackground: Color = this.onBackground,
+        divider: Color = this.divider,
         gradient: Brush = this.gradient,
         isLight: Boolean = this.isLight
     ): UmatColors = UmatColors(
@@ -120,6 +124,7 @@ class UmatColors(
         transparent = transparent,
         background = background,
         onBackground = onBackground,
+        divider = divider,
         gradient = gradient,
         isLight = isLight
 
@@ -133,6 +138,7 @@ class UmatColors(
         transparent = other.transparent
         background = other.background
         onBackground = other.onBackground
+        divider = other.divider
         gradient = other.gradient
         isLight = other.isLight
     }
@@ -146,6 +152,7 @@ fun lightColors(): UmatColors = UmatColors(
     transparent = Transparent,
     background = White,
     onBackground = Black,
+    divider = Gray100,
     gradient = Gradient,
     isLight = true
 )
@@ -158,6 +165,7 @@ fun darkColors(): UmatColors = UmatColors(
     transparent = Transparent,
     background = Black,
     onBackground = White,
+    divider = Gray100,
     gradient = Gradient,
     isLight = false
 )

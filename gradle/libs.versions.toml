@@ -19,6 +19,7 @@ composeHilt = "1.1.0"
 firebaseBom = "32.7.0"
 appcompat = "1.6.1"
 retrofit = "2.9.0"
+okhttp = "4.9.0"
 room = "2.6.1"
 coil = "2.5.0"
 naverMap = "3.17.0"
@@ -33,6 +34,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 # Hilt
@@ -60,6 +62,9 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 # retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
+retrofit_gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp3_interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 # room
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -88,10 +93,10 @@ firebasePerf = { id = "com.google.firebase.firebase-perf", version.ref = "fireba
 compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview",  "compose-material3", "compose-material"]
 firebase = ["firebase-anlytics", "firebase-crashlytics", "firebase-perf"]
 coroutines = ["coroutines-core", "coroutines-android"]
-androidx = [ "androidx-core-ktx", "androidx-appcompat", "androidx-lifecycle-runtime-ktx", "androidx-activity-ktx", "androidx-fragment-ktx"]
+androidx = [ "androidx-core-ktx", "androidx-appcompat", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-compose", "androidx-activity-ktx", "androidx-fragment-ktx"]
 composeDependency = ["compose-activity", "compose-navigation", "compose-hilt"]
 room = ["room", "roomKtx"]
-retrofit = ["retrofit"]
+retrofit = ["retrofit", "retrofit_gson", "okhttp3", "okhttp3_interceptor"]
 coil = ["coil"]
 naverMap = ["mapSdk", "naverMapCompose", "mapLocation", "naverMapLocation"]
 
