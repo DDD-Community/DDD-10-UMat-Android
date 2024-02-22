@@ -21,7 +21,7 @@
             android:value="${naverMapApiKey}" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".UmatRootActivity"
             android:exported="true"
             android:theme="@style/Theme.Umat">
             <intent-filter>

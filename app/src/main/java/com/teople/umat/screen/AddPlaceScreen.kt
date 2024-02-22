@@ -1,4 +1,4 @@
-package com.teople.umat
+package com.teople.umat.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +27,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teople.umat.R
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcAddFilled
 import com.teople.umat.component.ui.theme.Both
