@@ -50,6 +50,7 @@ dependencies {
     // Module
     implementation(project(":core:data"))
     implementation(project(":component"))
+    implementation(project(":navigator"))
 
     // Compose
     implementation(platform(libs.compose.bom))

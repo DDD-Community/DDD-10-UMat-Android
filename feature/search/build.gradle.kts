@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teople.umat.feature.mypage"
+    namespace = "com.teople.umat.feature.search"
     compileSdk = 34
 
     defaultConfig {
@@ -38,11 +38,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 

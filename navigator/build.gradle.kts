@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teople.umat.feature.mypage"
+    namespace = "com.teople.umat.navigator"
     compileSdk = 34
 
     defaultConfig {
@@ -32,35 +32,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-    // Module
-    implementation(project(":core:data"))
-    implementation(project(":component"))
-    implementation(project(":navigator"))
-
-    // Compose
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.compose)
-
-    implementation(libs.bundles.androidx)
-    implementation(libs.bundles.composeDependency)
-    implementation(libs.bundles.coil)
-
-    implementation(libs.bundles.coroutines)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

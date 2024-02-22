@@ -73,8 +73,10 @@ dependencies {
     implementation(project(":feature:daily"))
     implementation(project(":feature:mypage"))
     implementation(project(":feature:onboarding"))
+    implementation(project(":feature:search"))
     implementation(project(":core:data"))
     implementation(project(":component"))
+    implementation(project(":navigator"))
 
     // Compose
     implementation(platform(libs.compose.bom))
@@ -84,6 +86,8 @@ dependencies {
     implementation(libs.bundles.composeDependency)
     implementation(libs.bundles.coil)
     implementation(libs.bundles.naverMap)
+
+    implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.bundles.coroutines)
 
