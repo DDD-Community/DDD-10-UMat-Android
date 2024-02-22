@@ -2,6 +2,7 @@ package com.teople.umat.feature.home.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +33,9 @@ import com.teople.umat.component.widget.preview.UmatPreview
 import com.teople.umat.feature.home.R
 
 @Composable
-fun HomeSearchBar() {
+fun HomeSearchBar(
+    actionSearchClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .systemBarsPadding()
@@ -59,7 +62,10 @@ fun HomeSearchBar() {
                 .padding(
                     vertical = 11.dp,
                     horizontal = 14.dp
-                ),
+                )
+                .clickable {
+                    actionSearchClick()
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -103,7 +109,9 @@ private fun MypageScreenPreview() {
     UmatPreview(
         backgroundColor = Color.Red
     ) {
-        HomeSearchBar()
+        HomeSearchBar(
+            actionSearchClick = {}
+        )
     }
 }
 

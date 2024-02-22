@@ -3,14 +3,16 @@ package com.teople.umat.feature.search.component
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.TextField
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -75,32 +77,43 @@ fun SearchAppBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            // FIXME 텍스트 필드 디자인 변경
-            TextField(
-                modifier = Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.search_app_bar_hint),
-                        style = UmatTheme.typography.pretendardRegular16
-                    )
-                },
-                leadingIcon = {
-                    IconButton(
-                        onClick = {
-                            actionBackPress()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = UmatIcon.IcArrowBackFilled,
-                            contentDescription = null
-                        )
-                    }
-                },
+            BasicTextField(
+                modifier = Modifier.focusRequester(focusRequester),
                 value = query,
                 onValueChange = { searchQuery ->
                     query = searchQuery
+                },
+                decorationBox = { innerTextField ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
+                                actionBackPress()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = UmatIcon.IcArrowBackFilled,
+                                contentDescription = null
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            if (query.isEmpty()) {
+                                Text(
+                                    modifier = Modifier,
+                                    text = stringResource(id = R.string.search_app_bar_hint),
+                                    style = UmatTheme.typography.pretendardRegular16
+                                )
+                            }
+
+                            innerTextField()
+                        }
+                    }
                 },
                 textStyle = UmatTheme.typography.pretendardRegular16
             )

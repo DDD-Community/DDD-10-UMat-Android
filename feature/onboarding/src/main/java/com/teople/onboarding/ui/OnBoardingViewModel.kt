@@ -3,11 +3,16 @@ package com.teople.onboarding.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.teople.umat.navigator.NavRoute
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class OnBoardingViewModel(
     private val navController: NavController
@@ -24,6 +29,10 @@ class OnBoardingViewModel(
     val isInviteCodeValid: StateFlow<Boolean> =
         _inviteCodeTextFieldValue.map { it.length < 6 } // 추후에 초대코드 형식에 맞춰 변경필요
             .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    // FIXME 추후 ViewModel 구조 통일 후 변경 필요
+    private val _navigator = MutableSharedFlow<NavRoute>()
+    val navigator: SharedFlow<NavRoute> get() = _navigator.asSharedFlow()
 
     fun navigateToUp() {
         navController.navigateUp()
@@ -46,7 +55,9 @@ class OnBoardingViewModel(
     }
 
     fun navigateToMain() {
-        // TODO: 메인화면으로 이동
+        viewModelScope.launch {
+            _navigator.emit(NavRoute.Main)
+        }
     }
 
     fun onTextFieldValueChange(newValue: String) {
