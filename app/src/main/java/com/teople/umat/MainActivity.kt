@@ -119,6 +119,8 @@ class MainActivity : ComponentActivity() {
     ) {
         val navStackBackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navStackBackEntry?.destination
+        var shouldShowBottomSheet by remember { mutableStateOf(false) }
+        val addPlaceViewModel = AddPlaceViewModel(this)
 
         Divider(color = Gray300, modifier = Modifier.zIndex(3f))
         Row(
@@ -135,8 +137,8 @@ class MainActivity : ComponentActivity() {
                 navController = navController
             )
             IconButton(
-                modifier = Modifier.weight(1f),
-                onClick = { TODO("장소 추가 구현") }
+              modifier = Modifier.weight(1f),
+              onClick = { shouldShowBottomSheet = true }
             ) {
                 Icon(
                     imageVector = UmatIcon.IcAddFilled,
@@ -153,6 +155,14 @@ class MainActivity : ComponentActivity() {
                 navController = navController
             )
         }
+        if (shouldShowBottomSheet) {
+            AddPlaceBottomSheet(
+                onDismissRequest = {
+                    shouldShowBottomSheet = false
+                },
+                addPlaceViewModel = addPlaceViewModel
+            )
+        }
     }
 
     @Composable
@@ -167,8 +177,6 @@ class MainActivity : ComponentActivity() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 14.dp)
-                .weight(1f)
                 .clickable(
                     onClick = {
                         if (!selected) {
@@ -178,6 +186,8 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     })
+                .padding(bottom = 14.dp)
+                .weight(1f)
         ) {
             Column(
                 modifier = Modifier

@@ -16,8 +16,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,8 +47,12 @@ import com.teople.umat.feature.home.component.HomeSearchBar
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
-    val scaffoldState = rememberBottomSheetScaffoldState()
-
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberStandardBottomSheetState(
+            initialValue = SheetValue.PartiallyExpanded,
+            skipHiddenState = true
+        )
+    )
     BottomSheetScaffold(
         modifier = Modifier,
         sheetPeekHeight = 160.dp,
