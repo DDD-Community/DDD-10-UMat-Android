@@ -77,6 +77,8 @@ fun UmatTextFieldV2(
                 if (value.isEmpty()) {
                     Text(
                         text = hint,
+                        fontSize = 16.sp,
+                        lineHeight = 24.sp,
                         color = Gray500,
                     )
                 }
@@ -167,7 +169,7 @@ fun UmatTextFieldV2Enabled() {
         title = "이름을 알려주세요",
         hint = "원하시는 이름을 말해주세요",
         subText = "text",
-        value = "유저가 입력한 테스트",
+        value = "유저가 입력한 텍스트",
         onValueChange = {},
         onFocusChanged = {},
         state = UmatTextFieldState.Enabled,
