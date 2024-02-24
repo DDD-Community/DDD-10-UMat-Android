@@ -1,9 +1,9 @@
 package com.teople.umat.core.data.remote.response
 
 import com.google.gson.annotations.SerializedName
-import com.teople.umat.core.data.entity.CoreGooglePlacesEntity
+import com.teople.umat.core.data.entity.CoreGooglePlacesSearchEntity
 
-data class CoreGooglePlacesResponse(
+data class CoreGooglePlacesSearchResponse(
     @SerializedName("places") val places: List<Place>?
 ) {
     data class Place(
@@ -25,17 +25,17 @@ data class CoreGooglePlacesResponse(
     }
 
     companion object {
-        fun CoreGooglePlacesResponse.toEntity(): CoreGooglePlacesEntity {
-            return CoreGooglePlacesEntity(
+        fun CoreGooglePlacesSearchResponse.toEntity(): CoreGooglePlacesSearchEntity {
+            return CoreGooglePlacesSearchEntity(
                 places = this.places?.map { place ->
-                    CoreGooglePlacesEntity.Place(
+                    CoreGooglePlacesSearchEntity.Place(
                         id = place.id.orEmpty(),
-                        displayName = CoreGooglePlacesEntity.Place.DisplayName(
+                        displayName = CoreGooglePlacesSearchEntity.Place.DisplayName(
                             text = place.displayName?.text.orEmpty(),
                             languageCode = place.displayName?.languageCode.orEmpty()
                         ),
                         formattedAddress = place.formattedAddress.orEmpty(),
-                        location = CoreGooglePlacesEntity.Place.Location(
+                        location = CoreGooglePlacesSearchEntity.Place.Location(
                             latitude = place.location?.latitude?.toLong() ?: 0,
                             longitude = place.location?.longitude?.toLong() ?: 0
                         )
