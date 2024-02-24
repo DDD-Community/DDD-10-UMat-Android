@@ -92,9 +92,9 @@ data class CoreGooglePlacesDetailResponse(
                                 hour = period.close?.hour.orEmpty(),
                                 minute = period.close?.minute.orEmpty(),
                                 date = CoreGooglePlacesDetailEntity.Hour.Period.Time.Date(
-                                    year = period.open?.date?.year.orEmpty(),
-                                    month = period.open?.date?.month.orEmpty(),
-                                    day = period.open?.date?.day.orEmpty()
+                                    year = period.close?.date?.year.orEmpty(),
+                                    month = period.close?.date?.month.orEmpty(),
+                                    day = period.close?.date?.day.orEmpty()
                                 )
                             )
                         )
