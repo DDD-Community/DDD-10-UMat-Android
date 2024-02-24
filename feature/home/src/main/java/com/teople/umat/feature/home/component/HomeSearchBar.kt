@@ -35,7 +35,8 @@ import com.teople.umat.feature.home.R
 
 @Composable
 fun HomeSearchBar(
-    actionSearchClick: () -> Unit
+    actionSearchClick: () -> Unit,
+    requestPositionClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -101,7 +102,7 @@ fun HomeSearchBar(
                     shape = RoundedCornerShape(6.dp)
                 ),
             onClick = {
-
+                requestPositionClick.invoke()
             }
         ) {
             Icon(
@@ -120,7 +121,8 @@ private fun MypageScreenPreview() {
         backgroundColor = Color.Red
     ) {
         HomeSearchBar(
-            actionSearchClick = {}
+            actionSearchClick = {},
+            requestPositionClick = {}
         )
     }
 }
