@@ -1,6 +1,8 @@
 package com.teople.umat.core.data.di
 
+import com.teople.umat.core.data.CorePlaceRepository
 import com.teople.umat.core.data.CoreSearchRepository
+import com.teople.umat.core.data.repository.CorePlaceRepositoryImpl
 import com.teople.umat.core.data.repository.CoreSearchRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -18,6 +20,12 @@ abstract class CoreRepositoryViewModelModule {
     abstract fun bindCoreSearchRepository(
         impl: CoreSearchRepositoryImpl
     ): CoreSearchRepository
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindCorePlaceRepository(
+        impl: CorePlaceRepositoryImpl
+    ): CorePlaceRepository
 }
 
 @Module
