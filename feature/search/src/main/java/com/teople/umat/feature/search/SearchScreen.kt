@@ -27,6 +27,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.widget.preview.UmatPreview
+import com.teople.umat.core.data.entity.CoreGooglePlacesEntity
 import com.teople.umat.feature.search.component.SearchAppBar
 import com.teople.umat.feature.search.component.SearchResultRow
 import kotlinx.coroutines.flow.collectLatest
@@ -34,7 +35,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
+    actionItemClick: (CoreGooglePlacesEntity.Place) -> Unit,
+    actionBackPress: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -44,7 +47,7 @@ fun SearchScreen(
             viewModel.viewEvent.flowWithLifecycle(lifecycle).collectLatest { event ->
                 when (event) {
                     is SearchViewModel.ViewEvent.ClickPlace -> {
-                        // TODO("HomeScreen Pick Location & Keep SearchScreen BackStack")
+                        actionItemClick(event.data)
                     }
                 }
             }
@@ -52,14 +55,14 @@ fun SearchScreen(
     }
 
     BackHandler {
-        // TODO("BackPressed")
+        actionBackPress()
     }
 
     Scaffold(
         topBar = {
             SearchAppBar(
                 actionBackPress = {
-                    // TODO("BackPressed")
+                    actionBackPress()
                 },
                 actionQueryInput = { query ->
                     viewModel.searchQueryInput(query)
@@ -126,6 +129,9 @@ fun SearchScreen(
 @Composable
 private fun SearchScreenPreview() {
     UmatPreview {
-        SearchScreen()
+        SearchScreen(
+            actionItemClick = {},
+            actionBackPress = {}
+        )
     }
 }

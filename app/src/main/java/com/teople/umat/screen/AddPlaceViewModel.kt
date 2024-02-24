@@ -1,4 +1,4 @@
-package com.teople.umat
+package com.teople.umat.screen
 
 import android.content.Context
 import android.content.Intent

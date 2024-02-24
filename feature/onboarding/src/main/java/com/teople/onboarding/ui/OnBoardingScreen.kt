@@ -21,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,15 +29,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush.Companion.horizontalGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.teople.login.BuildConfig
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray500
@@ -47,12 +51,28 @@ import com.teople.umat.component.widget.ComponentButton
 import com.teople.umat.component.widget.component.UmatTextField
 import com.teople.umat.component.widget.component.UmatTextFieldDefaults
 import com.teople.umat.component.widget.component.UmatTransition
+import com.teople.umat.navigator.NavRoute
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import com.teople.umat.component.R as ComponentR
 
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    actionRoute: (NavRoute) -> Unit
+) {
     val navController = rememberNavController()
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
     val viewModel = OnBoardingViewModel(navController = navController)
+
+    LaunchedEffect(Unit) {
+        launch {
+            viewModel.navigator.flowWithLifecycle(lifecycle).collectLatest { route ->
+                actionRoute(route)
+            }
+        }
+    }
+
     NavHost(navController = navController, startDestination = "guide") {
         OnBoardingScreens.entries.forEach { screen ->
             composable(
@@ -117,7 +137,7 @@ fun GuideScreen(
 
 @Composable
 fun SocialLoginScreen(
-    viewModel: OnBoardingViewModel
+    viewModel: OnBoardingViewModel,
 ) {
     Surface {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -135,11 +155,12 @@ fun SocialLoginScreen(
                     .fillMaxWidth()
                     .padding(top = 61.dp)
             ) {
-                ComponentButton(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 16.dp)
-                    .height(50.dp),
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = 16.dp)
+                        .height(50.dp),
                     backgroundColor = Color(0xFFFEE500),
                     text = "카카오로 로그인",
                     textColor = Color(0xFF3C3922),
@@ -153,11 +174,12 @@ fun SocialLoginScreen(
                         )
                     }
                 )
-                ComponentButton(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 16.dp)
-                    .height(50.dp),
+                ComponentButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = 16.dp)
+                        .height(50.dp),
                     backgroundColor = Gray950,
                     text = "Apple로 로그인",
                     textColor = Color.White,
@@ -171,25 +193,31 @@ fun SocialLoginScreen(
                         )
                     }
                 )
-                Button(
-                    onClick = { viewModel.navigateToNickName() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                        .padding(bottom = 16.dp)
-                        .height(34.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFFF))
-                ) {
-                    Text(
-                        text = "둘러보기", style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 20.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF4B5563),
 
-                            )
-                    )
+                if (BuildConfig.DEBUG) {
+                    Button(
+                        onClick = {
+                            viewModel.navigateToMain()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .padding(bottom = 16.dp)
+                            .height(34.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFFF))
+                    ) {
+                        Text(
+                            text = "둘러보기", style = TextStyle(
+                                fontSize = 14.sp,
+                                lineHeight = 20.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF4B5563),
+
+                                )
+                        )
+                    }
                 }
+
                 Text(
                     text = "로그인 시 개인정보처리방침과 이용약관에 동의하게 됩니다",
                     modifier = Modifier

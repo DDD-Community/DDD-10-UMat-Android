@@ -43,10 +43,13 @@ import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.feature.home.component.HomeSearchBar
+import com.teople.umat.navigator.NavRoute
 
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    actionRoute: (route: NavRoute) -> Unit
+) {
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue = SheetValue.PartiallyExpanded,
@@ -71,7 +74,11 @@ fun HomeScreen() {
             )
 
             // 검색바
-            HomeSearchBar()
+            HomeSearchBar(
+                actionSearchClick = {
+                    actionRoute(NavRoute.Search)
+                }
+            )
         }
     }
 }

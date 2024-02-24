@@ -6,17 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.teople.login"
+    namespace = "com.teople.umat.feature.search"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -42,15 +39,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-
     // Module
     implementation(project(":core:data"))
     implementation(project(":component"))
@@ -63,12 +54,9 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.composeDependency)
     implementation(libs.bundles.coil)
-    implementation(libs.bundles.naverMap)
 
     implementation(libs.bundles.coroutines)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    implementation(project(":component"))
 }
