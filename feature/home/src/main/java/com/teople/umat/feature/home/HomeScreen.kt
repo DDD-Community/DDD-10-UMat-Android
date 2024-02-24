@@ -108,7 +108,9 @@ fun HomeScreen(
         modifier = Modifier,
         sheetPeekHeight = 160.dp,
         sheetContent = {
-            UmatBottomSheetScreen()
+            UmatBottomSheetScreen(
+                homeViewModel = homeViewModel
+            )
         },
         scaffoldState = scaffoldState,
         sheetContainerColor = Color.White
@@ -145,10 +147,13 @@ fun HomeScreen(
 
 
 @Composable
-fun UmatBottomSheetScreen() {
+fun UmatBottomSheetScreen(
+    homeViewModel: HomeViewModel = HomeViewModel()
+) {
+    var selectedButton by remember { mutableStateOf(WishType.WISH_OUR) }
     Column(
         modifier = Modifier
-            .height(340.dp)
+            .fillMaxHeight(0.8f)
             .background(Color.White)
     ) {
         Row(modifier = Modifier.padding(start = 20.dp)) {
@@ -175,27 +180,52 @@ fun UmatBottomSheetScreen() {
             modifier = Modifier.padding(start = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            WishPlaceButton(wishType = WishType.WISH_OUR)
-            WishPlaceButton(wishType = WishType.WISH_ME)
-            WishPlaceButton(wishType = WishType.WISH_YOUR)
+            WishPlaceButton(
+                wishType = WishType.WISH_OUR,
+                count = homeViewModel.getFavoriteCount(),
+                isSelected = selectedButton == WishType.WISH_OUR,
+                onClickButton = {
+                    selectedButton = WishType.WISH_OUR
+                })
+            WishPlaceButton(
+                wishType = WishType.WISH_ME,
+                count = homeViewModel.getFavoriteCount(),
+                isSelected = selectedButton == WishType.WISH_ME,
+                onClickButton = {
+                    selectedButton = WishType.WISH_ME
+                })
+            WishPlaceButton(
+                wishType = WishType.WISH_YOUR,
+                count = homeViewModel.getFavoriteCount(),
+                isSelected = selectedButton == WishType.WISH_YOUR,
+                onClickButton = {
+                    selectedButton = WishType.WISH_YOUR
+                })
         }
+        EmptyScreen()
     }
 }
 
 @Composable
 fun WishPlaceButton(
-    wishType: WishType = WishType.WISH_OUR
+    wishType: WishType = WishType.WISH_OUR,
+    count: Int = 220,
+    isSelected: Boolean = false,
+    onClickButton: () -> Unit = {}
 ) {
-    val isSelected by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .width(92.dp)
             .height(32.dp)
+
             .border(
                 1.dp,
                 color = if (isSelected) Gray800 else Gray300,
                 shape = RoundedCornerShape(32.dp)
-            ),
+            )
+            .clickable {
+                onClickButton()
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -212,7 +242,51 @@ fun WishPlaceButton(
             style = UmatTypography().pretendardSemiBold12,
             modifier = Modifier.padding(end = 1.dp)
         )
-        Text(text = "220", style = UmatTypography().pretendardSemiBold12)
+        Text(text = count.toString(), style = UmatTypography().pretendardSemiBold12)
+    }
+}
+
+@Composable
+fun EmptyScreen(
+    titleText: String = stringResource(R.string.empty_title_our),
+    onClickButton: () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.align(Alignment.Center)
+        ) {
+            Text(
+                text = "앗, 아직 정해진 곳이 없네요..!",
+                style = UmatTypography().pretendardSemiBold12,
+                modifier = Modifier.padding(bottom = 8.dp),
+                color = Gray400
+            )
+            Text(
+                text = titleText,
+                style = UmatTypography().pretendardSemiBold16,
+                color = Gray800,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "시작하기",
+                style = UmatTypography().pretendardSemiBold16,
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(top = 18.dp)
+                    .clickable {
+                        onClickButton()
+                    }
+                    .border(
+                        1.dp,
+                        color = Gray300,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(vertical = 10.dp, horizontal = 20.dp)
+            )
+        }
     }
 }
 
@@ -228,10 +302,11 @@ private fun requestCurrentPosition(
 
 enum class WishType(
     val imageVector: ImageVector,
-    val displayName: String
+    val displayName: String,
+    @StringRes val emptyTitleResource: Int? = null
 ) {
-    WISH_OUR(UmatIcon.IcProfileUserPurpleFilled, "우리"),
-    WISH_ME(UmatIcon.IcProfileUserBlueFilled, "지훈"),
+    WISH_OUR(UmatIcon.IcProfileUserPurpleFilled, "우리", R.string.empty_title_our),
+    WISH_ME(UmatIcon.IcProfileUserBlueFilled, "지훈", R.string.empty_title_me),
     WISH_YOUR(UmatIcon.IcProfileUserOrangeFilled, "주은"),
 }
 
