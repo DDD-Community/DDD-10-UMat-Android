@@ -1,4 +1,4 @@
-package com.teople.umat.main
+package com.teople.umat.feature.main
 
 import androidx.compose.runtime.Composable
 
