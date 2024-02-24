@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teople.umat.core.data.CoreSearchRepository
-import com.teople.umat.core.data.entity.CoreGooglePlacesEntity
+import com.teople.umat.core.data.entity.CoreGooglePlacesSearchEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -43,7 +43,7 @@ class SearchViewModel @Inject constructor(
             _query.filter { query ->
                 query.isNotBlank()
             }.debounce(500L).collect { query ->
-                repository.requestGooglePlace(query).onSuccess {
+                repository.requestSearch(query).onSuccess {
                     _viewState.update { viewState ->
                         viewState.copy(
                             searchResult = it.places
@@ -72,14 +72,14 @@ class SearchViewModel @Inject constructor(
     }
 
     data class ViewState(
-        val searchResult: List<CoreGooglePlacesEntity.Place> = emptyList()
+        val searchResult: List<CoreGooglePlacesSearchEntity.Place> = emptyList()
     )
 
     sealed interface ViewEvent {
 
         // 검색된 장소 클릭
         data class ClickPlace(
-            val data: CoreGooglePlacesEntity.Place
+            val data: CoreGooglePlacesSearchEntity.Place
         ) : ViewEvent
     }
 }

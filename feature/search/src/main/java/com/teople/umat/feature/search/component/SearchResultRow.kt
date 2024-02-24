@@ -24,12 +24,12 @@ import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray950
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.component.widget.preview.UmatPreview
-import com.teople.umat.core.data.entity.CoreGooglePlacesEntity
+import com.teople.umat.core.data.entity.CoreGooglePlacesSearchEntity
 
 @Composable
 fun SearchResultRow(
-    item: CoreGooglePlacesEntity.Place,
-    actionItemClick: (item: CoreGooglePlacesEntity.Place) -> Unit
+    item: CoreGooglePlacesSearchEntity.Place,
+    actionItemClick: (item: CoreGooglePlacesSearchEntity.Place) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -86,14 +86,14 @@ fun SearchResultRow(
 private fun SearchResultRowPreview() {
     UmatPreview {
         SearchResultRow(
-            item = CoreGooglePlacesEntity.Place(
+            item = CoreGooglePlacesSearchEntity.Place(
                 id = "",
-                displayName = CoreGooglePlacesEntity.Place.DisplayName(
+                displayName = CoreGooglePlacesSearchEntity.Place.DisplayName(
                     text = "블루도어북스",
                     languageCode = "ko"
                 ),
                 formattedAddress = "서울특별시 용산구 한남동 738-20",
-                location = CoreGooglePlacesEntity.Place.Location(
+                location = CoreGooglePlacesSearchEntity.Place.Location(
                     latitude = 0,
                     longitude = 0
                 )

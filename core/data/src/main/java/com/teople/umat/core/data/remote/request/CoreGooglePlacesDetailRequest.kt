@@ -1,6 +1,5 @@
 package com.teople.umat.core.data.remote.request
 
-data class CoreGooglePlacesRequest(
-    val textQuery: String,
+data class CoreGooglePlacesDetailRequest(
     val languageCode: String = "ko"
 )
