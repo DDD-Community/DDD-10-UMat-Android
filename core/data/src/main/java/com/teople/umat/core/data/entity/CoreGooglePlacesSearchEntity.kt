@@ -3,7 +3,7 @@ package com.teople.umat.core.data.entity
 /**
  * Google Place Entity
  */
-data class CoreGooglePlacesEntity(
+data class CoreGooglePlacesSearchEntity(
     val places: List<Place>
 ) {
     /**

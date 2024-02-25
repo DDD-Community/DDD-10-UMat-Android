@@ -1,9 +1,9 @@
 package com.teople.umat.core.data
 
-import com.teople.umat.core.data.entity.CoreGooglePlacesEntity
+import com.teople.umat.core.data.entity.CoreGooglePlacesSearchEntity
 
 interface CoreSearchRepository {
 
-    // 구글 장소 API 요청
-    suspend fun requestGooglePlace(query: String): Result<CoreGooglePlacesEntity>
+    // Request Google Places 'Text Search'
+    suspend fun requestSearch(query: String): Result<CoreGooglePlacesSearchEntity>
 }

@@ -27,7 +27,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.widget.preview.UmatPreview
-import com.teople.umat.core.data.entity.CoreGooglePlacesEntity
+import com.teople.umat.core.data.entity.CoreGooglePlacesSearchEntity
 import com.teople.umat.feature.search.component.SearchAppBar
 import com.teople.umat.feature.search.component.SearchResultRow
 import kotlinx.coroutines.flow.collectLatest
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
-    actionItemClick: (CoreGooglePlacesEntity.Place) -> Unit,
+    actionItemClick: (CoreGooglePlacesSearchEntity.Place) -> Unit,
     actionBackPress: () -> Unit,
     sharedTitle: String? = null
 ) {
