@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +73,8 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun HomeScreen(
-    actionRoute: (route: NavRoute) -> Unit
+    actionRoute: (route: NavRoute) -> Unit,
+    sharedTitle: String? = null
 ) {
 //    val locationPermissionState =
 //        rememberPermissionState(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -142,6 +144,13 @@ fun HomeScreen(
                 }
             )
         }
+    }
+
+    val sharedTitleUsed = rememberSaveable { mutableStateOf(false)}
+
+    if (sharedTitle != null && !sharedTitleUsed.value) {
+        sharedTitleUsed.value = true
+        actionRoute(NavRoute.SharedTitleSearch)
     }
 }
 

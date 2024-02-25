@@ -41,14 +41,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchAppBar(
     actionBackPress: () -> Unit,
-    actionQueryInput: (query: String) -> Unit
+    actionQueryInput: (query: String) -> Unit,
+    sharedTitle: String? = null
 ) {
     val focusRequester = remember {
         FocusRequester()
     }
 
     var query by rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf(sharedTitle ?: "")
     }
 
     LaunchedEffect(key1 = query) {
