@@ -59,7 +59,8 @@ import com.teople.umat.screen.GuideDialog
 
 @Composable
 fun MainScreen(
-    actionRoute: (route: NavRoute) -> Unit
+    actionRoute: (route: NavRoute) -> Unit,
+    sharedTitle: String? = null
 ) {
     val navController = rememberNavController()
     var showDialog by rememberSaveable { mutableStateOf(true) }
@@ -84,7 +85,8 @@ fun MainScreen(
                 HomeScreen(
                     actionRoute = {
                         actionRoute(it)
-                    }
+                    },
+                    sharedTitle = sharedTitle
                 )
             }
             composable(BottomNavItem.MyPage.screenRoute) {

@@ -37,7 +37,8 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
     actionItemClick: (CoreGooglePlacesSearchEntity.Place) -> Unit,
-    actionBackPress: () -> Unit
+    actionBackPress: () -> Unit,
+    sharedTitle: String? = null
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -58,6 +59,10 @@ fun SearchScreen(
         actionBackPress()
     }
 
+    sharedTitle?.let {
+        viewModel.searchQueryInput(it)
+    }
+
     Scaffold(
         topBar = {
             SearchAppBar(
@@ -66,7 +71,8 @@ fun SearchScreen(
                 },
                 actionQueryInput = { query ->
                     viewModel.searchQueryInput(query)
-                }
+                },
+                sharedTitle = sharedTitle
             )
         }
     ) { paddingValues ->

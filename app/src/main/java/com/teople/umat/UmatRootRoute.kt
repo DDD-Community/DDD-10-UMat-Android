@@ -12,12 +12,13 @@ import com.teople.umat.navigator.NavRoute
 
 @Composable
 fun UmatRootRoute(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    sharedTitle: String?
 ) {
     NavHost(
         modifier = Modifier,
         navController = navController,
-        startDestination = NavRoute.Onboarding.direction
+        startDestination = NavRoute.Main.direction
     ) {
 
         composable(NavRoute.Onboarding.direction) {
@@ -32,7 +33,8 @@ fun UmatRootRoute(
             MainScreen(
                 actionRoute = {
                     navController.navigate(it.direction)
-                }
+                },
+                sharedTitle = sharedTitle
             )
         }
 
@@ -44,6 +46,18 @@ fun UmatRootRoute(
                 actionBackPress = {
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable(NavRoute.SharedTitleSearch.direction) {
+            SearchScreen(
+                actionItemClick = { item ->
+//                    navController.navigate()
+                },
+                actionBackPress = {
+                    navController.popBackStack()
+                },
+                sharedTitle = sharedTitle
             )
         }
     }
