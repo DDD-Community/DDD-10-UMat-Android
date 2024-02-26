@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -32,11 +33,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +52,7 @@ import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.compose.CircleOverlay
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
@@ -62,6 +67,7 @@ import com.teople.umat.component.icon.umaticon.IcProfileUserPurpleFilled
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray400
+import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.feature.home.component.HomeSearchBar
@@ -106,6 +112,33 @@ fun HomeScreen(
         }
     }
 
+    var circleRadiusState by remember {
+        mutableStateOf(750.0)
+    }
+    var currentPositionState by remember {
+        mutableStateOf(LatLng(37.5666103, 126.9783882))
+    }
+    var currentPositionBoundRequested by remember {
+        mutableStateOf(false)
+    }
+
+    fun drawCurrentPositionCircle() {
+        with(cameraPositionState) {
+            val distance = HomeUtil.calculateDistance(
+                lat1 = this.position.target.latitude,
+                lon1 = this.contentBounds?.eastLongitude ?: return@with,
+                lat2 = this.position.target.latitude,
+                lon2 = this.contentBounds?.westLongitude ?: return@with
+            )
+            circleRadiusState = distance * 1000 / 2
+            currentPositionState =
+                LatLng(this.position.target.latitude, this.position.target.longitude)
+        }
+    }
+
+    val currentScreenSize = LocalConfiguration.current.screenWidthDp
+    val currentCircleBoundPaddingPercent: Double = 16.0 / currentScreenSize
+
     BottomSheetScaffold(
         modifier = Modifier,
         sheetPeekHeight = 160.dp,
@@ -132,21 +165,40 @@ fun HomeScreen(
                     isZoomControlEnabled = false
                 ),
                 cameraPositionState = cameraPositionState
-            )
-
-            // 검색바
-            HomeSearchBar(
-                actionSearchClick = {
-                    actionRoute(NavRoute.Search)
-                },
-                requestPositionClick = {
-                    requestCurrentPosition(fusedLocationClient, homeViewModel)
+            ) {
+                if(currentPositionBoundRequested) {
+                    CircleOverlay(
+                        center = currentPositionState,
+                        radius = circleRadiusState * (1.0 - currentCircleBoundPaddingPercent),
+                        color = Gray600.copy(alpha = 0.16f)
+                    )
                 }
-            )
+            }
+
+            Column {
+                // 검색바
+                HomeSearchBar(
+                    actionSearchClick = {
+                        actionRoute(NavRoute.Search)
+                    },
+                    requestPositionClick = {
+                        requestCurrentPosition(fusedLocationClient, homeViewModel)
+                        drawCurrentPositionCircle()
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                CurrentPositionButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .clickable {
+                            drawCurrentPositionCircle()
+                            currentPositionBoundRequested = true
+                        })
+            }
         }
     }
 
-    val sharedTitleUsed = rememberSaveable { mutableStateOf(false)}
+    val sharedTitleUsed = rememberSaveable { mutableStateOf(false) }
 
     if (sharedTitle != null && !sharedTitleUsed.value) {
         sharedTitleUsed.value = true
@@ -296,6 +348,28 @@ fun EmptyScreen(
                     .padding(vertical = 10.dp, horizontal = 20.dp)
             )
         }
+    }
+}
+
+@Composable
+fun CurrentPositionButton(modifier: Modifier) {
+    Row(
+        modifier = modifier
+            .shadow(2.dp, shape = RoundedCornerShape(8.dp))
+            .background(Color.White, RoundedCornerShape(8.dp))
+            .padding(horizontal = 18.dp, vertical = 10.dp)
+    ) {
+        Image(
+            painter = painterResource(id = com.teople.umat.component.R.drawable.ic_location_check_filled),
+            contentDescription = null,
+            modifier = Modifier
+                .size(20.dp)
+                .padding(end = 6.dp),
+        )
+        Text(
+            text = stringResource(R.string.current_position_bound),
+            style = UmatTypography().pretendardSemiBold14,
+        )
     }
 }
 
