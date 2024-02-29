@@ -2,7 +2,6 @@ package com.teople.umat.feature.home
 
 import android.content.Context
 import android.location.Geocoder
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -82,7 +81,9 @@ import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
 import com.teople.umat.feature.home.component.HomeSearchBar
 import com.teople.umat.feature.home.data.mockPositionItems
 import com.teople.umat.navigator.NavRoute
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 @OptIn(
@@ -239,7 +240,16 @@ fun UmatBottomSheetScreen(
     homeViewModel: HomeViewModel = HomeViewModel(),
     currentPosition: LatLng
 ) {
+    val context = LocalContext.current
     var selectedButton by remember { mutableStateOf(WishType.WISH_OUR) }
+    var currentPositionKoreanState by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch {
+        val newPosition = withContext(Dispatchers.IO) {
+            getAddress(currentPosition, context)
+        }
+        currentPositionKoreanState = newPosition
+    }
     Column(
         modifier = Modifier
             .fillMaxHeight(0.8f)
@@ -248,7 +258,7 @@ fun UmatBottomSheetScreen(
         Row(modifier = Modifier.padding(start = 20.dp)) {
             Text("현위치", style = UmatTypography().pretendardBold12, color = Gray300)
             Text(
-                "성동구 옥수동",
+                currentPositionKoreanState,
                 style = UmatTypography().pretendardBold12,
                 color = Color.Black,
                 modifier = Modifier.padding(start = 2.dp)
@@ -422,12 +432,16 @@ private fun requestCurrentPosition(
     }
 }
 
-private fun getAddress(latLng: LatLng, context: Context) {
-    val geocoder = Geocoder(context, Locale.getDefault())
-    val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-    val address = addresses?.get(0)
-    val knownName = address?.featureName
-    Toast.makeText(context, "현재 위치는 $knownName 입니다.", Toast.LENGTH_LONG).show()
+private fun getAddress(latLng: LatLng, context: Context): String {
+    return try {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        val address = addresses?.get(0)?.getAddressLine(0)?.split(" ") ?: return ""
+        val knownName = "${address[2]} ${address[3]}"
+        knownName
+    } catch (e: Exception) {
+        ""
+    }
 }
 
 enum class WishType(
