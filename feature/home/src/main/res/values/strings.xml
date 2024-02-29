@@ -4,5 +4,6 @@
     <string name="home_search_bar_title">공간명 검색</string>
     <string name="empty_title_our">함께 가고 싶은곳이 어딜지\n토너먼트로 어디갈지 정해볼까요?</string>
     <string name="empty_title_me">내가 가고 싶은 곳을 추가해볼까요?</string>
+    <string name="current_position_bound">이 지역 저장 장소보기</string>
 
 </resources>
