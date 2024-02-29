@@ -2,22 +2,41 @@ package com.teople.umat.feature.home
 
 import androidx.lifecycle.ViewModel
 import com.naver.maps.geometry.LatLng
+import com.teople.umat.feature.home.data.mockPositionItems
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class HomeViewModel : ViewModel() {
     // val myFavoriteList = StateFlow<List<Place>>() this will be used when user add the favorite place
 
-    private val _currentPositionFlow = MutableStateFlow(LatLng(SEOUL_LAT, SEOUL_LNG)) // init position
+    val tempPlaceList = mockPositionItems
+
+    private val _currentPositionFlow =
+        MutableStateFlow(LatLng(SEOUL_LAT, SEOUL_LNG)) // init position
     val currentPositionFlow = _currentPositionFlow.asStateFlow()
 
-    fun getFavoriteCount(/* user */): Int {
-        // will return the count of user's favorite place
-        return 0
-    }
+    private val _currentCameraPositionFlow =
+        MutableStateFlow(LatLng(SEOUL_LAT, SEOUL_LNG)) // init position
+    val currentCameraPositionFlow = _currentCameraPositionFlow.asStateFlow()
+
+    private val _currentCircleRadiusFlow = MutableStateFlow(0.0)
+    val currentCircleRadiusFlow = _currentCircleRadiusFlow.asStateFlow()
+
 
     fun setCurrentPosition(latLng: LatLng) {
         _currentPositionFlow.value = latLng
+    }
+
+    fun updateCurrentCircleRadius(radius: Double, paddingPercent: Double) {
+        _currentCircleRadiusFlow.value = radius * (1.0 - paddingPercent)
+    }
+
+    fun isPositionInBound(latLng: LatLng, currentPosition: LatLng): Boolean {
+        return currentPosition.distanceTo(latLng) <= _currentCircleRadiusFlow.value
+    }
+
+    fun updateCurrentCameraPosition(latLng: LatLng) {
+        _currentCameraPositionFlow.value = latLng
     }
 
     companion object {

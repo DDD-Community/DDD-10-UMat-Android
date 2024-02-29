@@ -1,5 +1,8 @@
 package com.teople.umat.feature.home
 
+import android.content.Context
+import android.location.Geocoder
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,9 +61,12 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.overlay.OverlayImage
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcProfileUserBlueFilled
 import com.teople.umat.component.icon.umaticon.IcProfileUserOrangeFilled
@@ -70,9 +77,13 @@ import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LAT
+import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
 import com.teople.umat.feature.home.component.HomeSearchBar
+import com.teople.umat.feature.home.data.mockPositionItems
 import com.teople.umat.navigator.NavRoute
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @OptIn(
     ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class,
@@ -112,15 +123,12 @@ fun HomeScreen(
         }
     }
 
-    var circleRadiusState by remember {
-        mutableStateOf(750.0)
-    }
-    var currentPositionState by remember {
-        mutableStateOf(LatLng(37.5666103, 126.9783882))
-    }
     var currentPositionBoundRequested by remember {
         mutableStateOf(false)
     }
+
+    val currentScreenSize = LocalConfiguration.current.screenWidthDp
+    val currentCircleBoundPaddingPercent: Double = 16.0 / currentScreenSize
 
     fun drawCurrentPositionCircle() {
         with(cameraPositionState) {
@@ -130,14 +138,16 @@ fun HomeScreen(
                 lat2 = this.position.target.latitude,
                 lon2 = this.contentBounds?.westLongitude ?: return@with
             )
-            circleRadiusState = distance * 1000 / 2
-            currentPositionState =
-                LatLng(this.position.target.latitude, this.position.target.longitude)
+            homeViewModel.updateCurrentCircleRadius(
+                distance * 1000 / 2,
+                currentCircleBoundPaddingPercent
+            )
+            homeViewModel.updateCurrentCameraPosition(this.position.target)
         }
     }
 
-    val currentScreenSize = LocalConfiguration.current.screenWidthDp
-    val currentCircleBoundPaddingPercent: Double = 16.0 / currentScreenSize
+    val currentCameraPosition = homeViewModel.currentCameraPositionFlow.collectAsState()
+    val currentRadius = homeViewModel.currentCircleRadiusFlow.collectAsState()
 
     BottomSheetScaffold(
         modifier = Modifier,
@@ -166,12 +176,29 @@ fun HomeScreen(
                 ),
                 cameraPositionState = cameraPositionState
             ) {
-                if(currentPositionBoundRequested) {
+                if (currentPositionBoundRequested) {
                     CircleOverlay(
-                        center = currentPositionState,
-                        radius = circleRadiusState * (1.0 - currentCircleBoundPaddingPercent),
+                        center = currentCameraPosition.value,
+                        radius = currentRadius.value,
                         color = Gray600.copy(alpha = 0.16f)
                     )
+                    for (item in mockPositionItems) {
+                        if (!homeViewModel.isPositionInBound(
+                                item.latLng,
+                                currentCameraPosition.value
+                            )
+                        ) continue
+                        Marker(
+                            state = MarkerState(position = item.latLng),
+                            icon = OverlayImage.fromResource(
+                                when (item.type) {
+                                    WishType.WISH_OUR -> com.teople.umat.component.R.drawable.ic_pin_our
+                                    WishType.WISH_ME -> com.teople.umat.component.R.drawable.ic_pin_my
+                                    else -> com.teople.umat.component.R.drawable.ic_pin_your
+                                }
+                            )
+                        )
+                    }
                 }
             }
 
@@ -183,7 +210,6 @@ fun HomeScreen(
                     },
                     requestPositionClick = {
                         requestCurrentPosition(fusedLocationClient, homeViewModel)
-                        drawCurrentPositionCircle()
                     }
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -396,7 +422,10 @@ enum class WishType(
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun UmatBottomSheet() {
-    UmatBottomSheetScreen()
+    UmatBottomSheetScreen(
+        homeViewModel = HomeViewModel(),
+        currentPosition = LatLng(SEOUL_LAT, SEOUL_LNG)
+    )
 }
 
 @Preview
