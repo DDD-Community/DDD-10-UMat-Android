@@ -1,4 +1,4 @@
-package com.teople.umat
+package com.teople.umat.route
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.teople.onboarding.ui.OnBoardingScreen
+import com.teople.umat.MainScreen
 import com.teople.umat.feature.search.SearchScreen
 import com.teople.umat.navigator.NavRoute
 

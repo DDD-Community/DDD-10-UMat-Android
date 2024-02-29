@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Umat"
+        android:theme="@style/Theme.Umat.NoActionBar"
         tools:targetApi="31">
 
         <meta-data
@@ -23,9 +23,9 @@
             android:value="${naverMapApiKey}" />
 
         <activity
-            android:name=".UmatRootActivity"
+            android:name=".UmatSplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.Umat">
+            android:theme="@style/Theme.Umat.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,6 +37,12 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".UmatRootActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Umat.NoActionBar" />
+
     </application>
 
     <queries>
