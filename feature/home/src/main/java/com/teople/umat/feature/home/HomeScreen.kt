@@ -55,9 +55,9 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.teople.umat.component.icon.UmatIcon
-import com.teople.umat.component.icon.umaticon.IcProfileUserBlueFilled
-import com.teople.umat.component.icon.umaticon.IcProfileUserOrangeFilled
-import com.teople.umat.component.icon.umaticon.IcProfileUserPurpleFilled
+import com.teople.umat.component.icon.umaticon.IcFilterMe
+import com.teople.umat.component.icon.umaticon.IcFilterOur
+import com.teople.umat.component.icon.umaticon.IcFilterYou
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray400
@@ -305,9 +305,9 @@ enum class WishType(
     val displayName: String,
     @StringRes val emptyTitleResource: Int? = null
 ) {
-    WISH_OUR(UmatIcon.IcProfileUserPurpleFilled, "우리", R.string.empty_title_our),
-    WISH_ME(UmatIcon.IcProfileUserBlueFilled, "지훈", R.string.empty_title_me),
-    WISH_YOUR(UmatIcon.IcProfileUserOrangeFilled, "주은"),
+    WISH_OUR(UmatIcon.IcFilterOur, "우리", R.string.empty_title_our),
+    WISH_ME(UmatIcon.IcFilterMe, "지훈", R.string.empty_title_me),
+    WISH_YOUR(UmatIcon.IcFilterYou, "주은"),
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)

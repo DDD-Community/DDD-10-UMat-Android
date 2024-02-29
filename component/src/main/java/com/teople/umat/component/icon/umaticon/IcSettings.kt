@@ -14,13 +14,13 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.teople.umat.component.icon.UmatIcon
 
-public val UmatIcon.IcSettingsOutlined: ImageVector
+public val UmatIcon.IcSettings: ImageVector
     get() {
-        if (_icSettingsOutlined != null) {
-            return _icSettingsOutlined!!
+        if (_icSettings != null) {
+            return _icSettings!!
         }
-        _icSettingsOutlined = Builder(name = "IcSettingsOutlined", defaultWidth = 24.0.dp,
-                defaultHeight = 24.0.dp, viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
+        _icSettings = Builder(name = "IcSettings", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
+                viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
             path(fill = SolidColor(Color(0xFF111827)), stroke = null, strokeLineWidth = 0.0f,
                     strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
                     pathFillType = EvenOdd) {
@@ -95,7 +95,7 @@ public val UmatIcon.IcSettingsOutlined: ImageVector
             }
         }
         .build()
-        return _icSettingsOutlined!!
+        return _icSettings!!
     }
 
-private var _icSettingsOutlined: ImageVector? = null
+private var _icSettings: ImageVector? = null

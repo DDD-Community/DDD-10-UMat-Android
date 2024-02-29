@@ -1,6 +1,5 @@
 package com.teople.umat.feature.mypage
 
-import MypageIcon
 import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -35,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -43,8 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcArrowForwardFilled
-import com.teople.umat.component.icon.umaticon.IcProfileUserOrangeFilled
-import com.teople.umat.component.icon.umaticon.IcSettingsOutlined
+import com.teople.umat.component.icon.umaticon.IcHeartFilled
+import com.teople.umat.component.icon.umaticon.IcPinFilled
+import com.teople.umat.component.icon.umaticon.IcSettings
 import com.teople.umat.component.ui.theme.Blue500
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
@@ -57,7 +58,6 @@ import com.teople.umat.component.widget.ComponentButton
 import com.teople.umat.component.widget.component.UmatAppBar
 import com.teople.umat.component.widget.component.UmatBadge
 import com.teople.umat.component.widget.component.UmatBadgeDefaults
-import mypageicon.IcHeartFilled
 
 @Composable
 fun MypageScreen(
@@ -74,7 +74,7 @@ fun MypageScreen(
                         modifier = Modifier.clickable {
                             onNavigator()
                         },
-                        imageVector = UmatIcon.IcSettingsOutlined,
+                        imageVector = UmatIcon.IcSettings,
                         contentDescription = null
                     )
                 }
@@ -122,7 +122,10 @@ private fun MypageHeaderSection() {
             Image(
                 modifier = Modifier.size(80.dp),
                 contentScale = ContentScale.FillWidth,
-                imageVector = UmatIcon.IcProfileUserOrangeFilled,
+                imageVector = UmatIcon.IcPinFilled,
+                colorFilter = ColorFilter.tint(
+                    color = Orange500
+                ),
                 contentDescription = null
             )
 
@@ -153,7 +156,7 @@ private fun MypageHeaderSection() {
                 Image(
                     modifier = Modifier
                         .padding(horizontal = 8.dp),
-                    imageVector = MypageIcon.IcHeartFilled,
+                    imageVector = UmatIcon.IcHeartFilled,
                     contentDescription = null
                 )
 
