@@ -154,7 +154,8 @@ fun HomeScreen(
         sheetPeekHeight = 160.dp,
         sheetContent = {
             UmatBottomSheetScreen(
-                homeViewModel = homeViewModel
+                homeViewModel = homeViewModel,
+                currentPosition = currentCameraPosition.value
             )
         },
         scaffoldState = scaffoldState,
@@ -235,7 +236,8 @@ fun HomeScreen(
 
 @Composable
 fun UmatBottomSheetScreen(
-    homeViewModel: HomeViewModel = HomeViewModel()
+    homeViewModel: HomeViewModel = HomeViewModel(),
+    currentPosition: LatLng
 ) {
     var selectedButton by remember { mutableStateOf(WishType.WISH_OUR) }
     Column(
@@ -253,7 +255,9 @@ fun UmatBottomSheetScreen(
             ) // TODO : 현위치 가져오기
         }
         Text(
-            text = "총 %d 개의 장소".format(10),
+            text = "총 %d 개의 장소".format(
+                homeViewModel.getCurrentPositionFavoriteCount(currentPosition)
+            ),
             style = UmatTypography().pretendardSemiBold18,
             modifier = Modifier.padding(start = 20.dp, top = 6.dp)
         )
@@ -269,21 +273,30 @@ fun UmatBottomSheetScreen(
         ) {
             WishPlaceButton(
                 wishType = WishType.WISH_OUR,
-                count = homeViewModel.getFavoriteCount(),
+                count = homeViewModel.getCurrentPositionFavoriteCountByType(
+                    type = WishType.WISH_OUR,
+                    currentPosition = currentPosition
+                ),
                 isSelected = selectedButton == WishType.WISH_OUR,
                 onClickButton = {
                     selectedButton = WishType.WISH_OUR
                 })
             WishPlaceButton(
                 wishType = WishType.WISH_ME,
-                count = homeViewModel.getFavoriteCount(),
+                count = homeViewModel.getCurrentPositionFavoriteCountByType(
+                    type = WishType.WISH_ME,
+                    currentPosition = currentPosition
+                ),
                 isSelected = selectedButton == WishType.WISH_ME,
                 onClickButton = {
                     selectedButton = WishType.WISH_ME
                 })
             WishPlaceButton(
                 wishType = WishType.WISH_YOUR,
-                count = homeViewModel.getFavoriteCount(),
+                count = homeViewModel.getCurrentPositionFavoriteCountByType(
+                    type = WishType.WISH_YOUR,
+                    currentPosition = currentPosition
+                ),
                 isSelected = selectedButton == WishType.WISH_YOUR,
                 onClickButton = {
                     selectedButton = WishType.WISH_YOUR
@@ -407,6 +420,14 @@ private fun requestCurrentPosition(
     fusedLocationClient.lastLocation.addOnSuccessListener {
         homeViewModel.setCurrentPosition(LatLng(it.latitude, it.longitude))
     }
+}
+
+private fun getAddress(latLng: LatLng, context: Context) {
+    val geocoder = Geocoder(context, Locale.getDefault())
+    val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+    val address = addresses?.get(0)
+    val knownName = address?.featureName
+    Toast.makeText(context, "현재 위치는 $knownName 입니다.", Toast.LENGTH_LONG).show()
 }
 
 enum class WishType(

@@ -39,6 +39,19 @@ class HomeViewModel : ViewModel() {
         _currentCameraPositionFlow.value = latLng
     }
 
+    fun getCurrentPositionFavoriteCountByType(type: WishType, currentPosition: LatLng): Int {
+        return tempPlaceList
+            .filter { it.type == type }
+            .filter { currentPosition.distanceTo(it.latLng) <= _currentCircleRadiusFlow.value }
+            .size
+    }
+
+    fun getCurrentPositionFavoriteCount(currentPosition: LatLng): Int {
+        return tempPlaceList
+            .filter { currentPosition.distanceTo(it.latLng) <= _currentCircleRadiusFlow.value }
+            .size
+    }
+
     companion object {
         const val SEOUL_LAT = 37.5665
         const val SEOUL_LNG = 126.9780
