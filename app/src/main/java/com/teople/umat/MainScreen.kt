@@ -135,7 +135,11 @@ fun MainScreen(
                     content = {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(viewState.selectedPlace?.photoUrl)
+                                .data(
+                                    viewState.selectedPlace?.photoUrl?.ifEmpty {
+                                        com.teople.umat.component.R.drawable.ic_place_holder
+                                    }
+                                )
                                 .crossfade(true)
                                 .build(),
                             placeholder = painterResource(id = com.teople.umat.component.R.drawable.ic_place_holder),
