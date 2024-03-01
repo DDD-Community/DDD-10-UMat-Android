@@ -26,7 +26,7 @@ class CorePlaceRepositoryImpl @Inject constructor(
             val placePhoto = if (photoName.isNotBlank()) {
                 placesDataSource.requestPlacePhoto(
                     photoName = photoName
-                ).photoUrl
+                ).photoUri ?: ""
             } else {
                 ""
             }
