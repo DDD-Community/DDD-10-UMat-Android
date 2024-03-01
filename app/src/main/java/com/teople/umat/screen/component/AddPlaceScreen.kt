@@ -1,4 +1,4 @@
-package com.teople.umat.screen
+package com.teople.umat.screen.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

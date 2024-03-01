@@ -1,4 +1,4 @@
-package com.teople.umat
+package com.teople.umat.screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.teople.onboarding.ui.OnBoardingScreen
-import com.teople.umat.MainScreen
+import com.teople.umat.screen.MainScreen
 import com.teople.umat.feature.search.SearchScreen
 import com.teople.umat.navigator.NavArgument
 import com.teople.umat.navigator.NavRoute

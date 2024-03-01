@@ -1,4 +1,4 @@
-package com.teople.umat
+package com.teople.umat.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,6 +52,7 @@ import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.gson.Gson
+import com.teople.umat.R
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcAddFilled
 import com.teople.umat.component.icon.umaticon.IcHomeOutlined
@@ -63,14 +64,13 @@ import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.component.widget.component.UmatSelectBottomSheet
-import com.teople.umat.core.data.entity.CoreGooglePlacesDetailEntity
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
 import com.teople.umat.navigator.NavArgument
 import com.teople.umat.navigator.NavRoute
-import com.teople.umat.screen.AddPlaceBottomSheet
-import com.teople.umat.screen.AddPlaceViewModel
-import com.teople.umat.screen.GuideDialog
+import com.teople.umat.screen.component.AddPlaceBottomSheet
+import com.teople.umat.screen.component.AddPlaceViewModel
+import com.teople.umat.screen.component.GuideDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
