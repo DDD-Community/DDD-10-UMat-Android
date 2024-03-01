@@ -7,6 +7,7 @@ data class CoreGooglePlacesDetailResponse(
     @SerializedName("id") val id: String?,
     @SerializedName("displayName") val displayName: DisplayName?,
     @SerializedName("formattedAddress") val formattedAddress: String?,
+    @SerializedName("location") val location: Location?,
     @SerializedName("photos") val photos: List<Photo>?,
     @SerializedName("priceLevel") val priceLevel: String?,
     @SerializedName("currentOpeningHours") val hours: Hour?,
@@ -16,6 +17,11 @@ data class CoreGooglePlacesDetailResponse(
     data class DisplayName(
         @SerializedName("text") val text: String?,
         @SerializedName("languageCode") val languageCode: String?
+    )
+
+    data class Location(
+        @SerializedName("latitude") val latitude: Number?,
+        @SerializedName("longitude") val longitude: Number?
     )
 
     data class Photo(
@@ -67,6 +73,10 @@ data class CoreGooglePlacesDetailResponse(
                 displayName = CoreGooglePlacesDetailEntity.DisplayName(
                     text = displayName?.text.orEmpty(),
                     languageCode = displayName?.languageCode.orEmpty()
+                ),
+                location = CoreGooglePlacesDetailEntity.Location(
+                    latitude = location?.latitude ?: -1,
+                    longitude = location?.longitude ?: -1
                 ),
                 formattedAddress = formattedAddress.orEmpty(),
                 photoUrl = photoUrl,
