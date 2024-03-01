@@ -59,11 +59,12 @@ import com.teople.umat.screen.GuideDialog
 
 @Composable
 fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel(),
     actionRoute: (route: NavRoute) -> Unit,
     sharedTitle: String? = null
 ) {
     val navController = rememberNavController()
-    var showDialog by rememberSaveable { mutableStateOf(true) }
+    val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
     Scaffold(
         // enableEdgeToEdge 로 인한 바텀 네비게이션 영역 패딩 필요
@@ -95,12 +96,14 @@ fun MainScreen(
                 )
             }
         }
-    }
 
-    if (showDialog) {
-        GuideDialog(
-            onDismissRequest = {
-                showDialog = false
+        when {
+            viewState.isShownGuide.not() -> {
+                GuideDialog(
+                    onDismissRequest = {
+                        viewModel.setShownGuideDialog()
+                    }
+                )
             }
         )
     }

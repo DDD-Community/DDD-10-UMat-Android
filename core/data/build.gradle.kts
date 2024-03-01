@@ -48,6 +48,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.datastore.preference)
+
     implementation(libs.bundles.coroutines)
 
     implementation(libs.hilt.android)
