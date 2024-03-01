@@ -82,6 +82,7 @@ import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.component.widget.component.UmatItemCard
+import com.teople.umat.core.data.entity.CoreGooglePlacesDetailEntity
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LAT
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
 import com.teople.umat.feature.home.component.HomeSearchBar
@@ -198,12 +199,12 @@ fun HomeScreen(
                     )
                     for (item in mockPositionItems) {
                         if (!viewModel.isPositionInBound(
-                                item.latLng,
+                                item.googlePlaceItem.location.toLatLng(),
                                 currentCameraPosition.value
                             )
                         ) continue
                         Marker(
-                            state = MarkerState(position = item.latLng),
+                            state = MarkerState(position = item.googlePlaceItem.location.toLatLng()),
                             icon = OverlayImage.fromResource(
                                 when (item.type) {
                                     WishType.WISH_OUR -> com.teople.umat.component.R.drawable.ic_pin_our
@@ -361,12 +362,14 @@ fun UmatBottomSheetScreen(
         } else {
             items(currentSelectedUserItems.size) {
                 UmatItemCard(
-                    image = painterResource(id = com.teople.umat.component.R.drawable.temp),
-                    name = currentSelectedUserItems[it].title,
-                    location = "서울시 강남구",
+                    photoUrl = currentSelectedUserItems[it].googlePlaceItem.photoUrl,
+                    name = currentSelectedUserItems[it].googlePlaceItem.displayName.text,
+                    location = currentSelectedUserItems[it].googlePlaceItem.formattedAddress,
                     isWin = false,
                     isLike = true,
-                    open = "오픈",
+                    open = with(currentSelectedUserItems[it].googlePlaceItem.hours.periods[0]) {
+                        "${this.open.hour}:${this.open.minute} ~ ${this.close.hour}:${this.close.minute}"
+                    },
                     buttonText = "여기 가볼래"
                 ) {
                 }
@@ -493,6 +496,10 @@ private fun getAddress(latLng: LatLng, context: Context): String {
     } catch (e: Exception) {
         ""
     }
+}
+
+private fun CoreGooglePlacesDetailEntity.Location.toLatLng(): LatLng {
+    return LatLng(this.latitude, this.longitude)
 }
 
 enum class WishType(

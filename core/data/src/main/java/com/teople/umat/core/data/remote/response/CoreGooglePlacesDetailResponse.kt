@@ -90,7 +90,7 @@ data class CoreGooglePlacesDetailResponse(
                             open = CoreGooglePlacesDetailEntity.Hour.Period.Time(
                                 day = period.open?.day.orEmpty(),
                                 hour = period.open?.hour.orEmpty(),
-                                minute = period.open?.minute.orEmpty(),
+                                minute = period.open?.minute?.takeIf { it != "0" } ?: "00",
                                 date = CoreGooglePlacesDetailEntity.Hour.Period.Time.Date(
                                     year = period.open?.date?.year.orEmpty(),
                                     month = period.open?.date?.month.orEmpty(),
@@ -100,7 +100,7 @@ data class CoreGooglePlacesDetailResponse(
                             close = CoreGooglePlacesDetailEntity.Hour.Period.Time(
                                 day = period.close?.day.orEmpty(),
                                 hour = period.close?.hour.orEmpty(),
-                                minute = period.close?.minute.orEmpty(),
+                                minute = period.open?.minute?.takeIf { it != "0" } ?: "00",
                                 date = CoreGooglePlacesDetailEntity.Hour.Period.Time.Date(
                                     year = period.close?.date?.year.orEmpty(),
                                     month = period.close?.date?.month.orEmpty(),

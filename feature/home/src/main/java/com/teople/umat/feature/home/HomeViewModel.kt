@@ -62,13 +62,27 @@ class HomeViewModel @Inject constructor(
     fun getCurrentPositionFavoriteCountByType(type: WishType, currentPosition: LatLng): Int {
         return tempPlaceList
             .filter { it.type == type }
-            .filter { currentPosition.distanceTo(it.latLng) <= _currentCircleRadiusFlow.value }
+            .filter {
+                currentPosition.distanceTo(
+                    LatLng(
+                        it.googlePlaceItem.location.latitude,
+                        it.googlePlaceItem.location.longitude
+                    )
+                ) <= _currentCircleRadiusFlow.value
+            }
             .size
     }
 
     fun getCurrentPositionFavoriteCount(currentPosition: LatLng): Int {
         return tempPlaceList
-            .filter { currentPosition.distanceTo(it.latLng) <= _currentCircleRadiusFlow.value }
+            .filter {
+                currentPosition.distanceTo(
+                    LatLng(
+                        it.googlePlaceItem.location.latitude,
+                        it.googlePlaceItem.location.longitude
+                    )
+                ) <= _currentCircleRadiusFlow.value
+            }
             .also { _currentBoundItemsFlow.value = it }
             .size
     }
