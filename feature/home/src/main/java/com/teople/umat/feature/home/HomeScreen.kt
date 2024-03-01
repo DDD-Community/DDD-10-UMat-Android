@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -91,6 +92,7 @@ import java.util.Locale
 )
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
     actionRoute: (route: NavRoute) -> Unit,
     sharedTitle: String? = null
 ) {
@@ -101,7 +103,6 @@ fun HomeScreen(
 //    } else {
 //
 //    }
-    val homeViewModel = HomeViewModel()
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -115,7 +116,7 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     coroutineScope.launch {
-        homeViewModel.currentPositionFlow.flowWithLifecycle(lifecycle).collect {
+        viewModel.currentPositionFlow.flowWithLifecycle(lifecycle).collect {
             cameraPositionState.animate(
                 update = CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude)),
                 animation = CameraAnimation.Easing,
@@ -139,23 +140,23 @@ fun HomeScreen(
                 lat2 = this.position.target.latitude,
                 lon2 = this.contentBounds?.westLongitude ?: return@with
             )
-            homeViewModel.updateCurrentCircleRadius(
+            viewModel.updateCurrentCircleRadius(
                 distance * 1000 / 2,
                 currentCircleBoundPaddingPercent
             )
-            homeViewModel.updateCurrentCameraPosition(this.position.target)
+            viewModel.updateCurrentCameraPosition(this.position.target)
         }
     }
 
-    val currentCameraPosition = homeViewModel.currentCameraPositionFlow.collectAsState()
-    val currentRadius = homeViewModel.currentCircleRadiusFlow.collectAsState()
+    val currentCameraPosition = viewModel.currentCameraPositionFlow.collectAsState()
+    val currentRadius = viewModel.currentCircleRadiusFlow.collectAsState()
 
     BottomSheetScaffold(
         modifier = Modifier,
         sheetPeekHeight = 160.dp,
         sheetContent = {
             UmatBottomSheetScreen(
-                homeViewModel = homeViewModel,
+                homeViewModel = viewModel,
                 currentPosition = currentCameraPosition.value
             )
         },
@@ -185,7 +186,7 @@ fun HomeScreen(
                         color = Gray600.copy(alpha = 0.16f)
                     )
                     for (item in mockPositionItems) {
-                        if (!homeViewModel.isPositionInBound(
+                        if (!viewModel.isPositionInBound(
                                 item.latLng,
                                 currentCameraPosition.value
                             )
@@ -211,7 +212,7 @@ fun HomeScreen(
                         actionRoute(NavRoute.Search)
                     },
                     requestPositionClick = {
-                        requestCurrentPosition(fusedLocationClient, homeViewModel)
+                        requestCurrentPosition(fusedLocationClient, viewModel)
                     }
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -230,14 +231,14 @@ fun HomeScreen(
 
     if (sharedTitle != null && !sharedTitleUsed.value) {
         sharedTitleUsed.value = true
-        actionRoute(NavRoute.SharedTitleSearch)
+        actionRoute(NavRoute.Search)
     }
 }
 
 
 @Composable
 fun UmatBottomSheetScreen(
-    homeViewModel: HomeViewModel = HomeViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
     currentPosition: LatLng
 ) {
     val context = LocalContext.current
@@ -458,7 +459,6 @@ enum class WishType(
 @Composable
 fun UmatBottomSheet() {
     UmatBottomSheetScreen(
-        homeViewModel = HomeViewModel(),
         currentPosition = LatLng(SEOUL_LAT, SEOUL_LNG)
     )
 }

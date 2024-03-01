@@ -1,13 +1,24 @@
 package com.teople.umat.feature.home
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
+import com.teople.umat.core.data.entity.CoreGooglePlacesDetailEntity
 import com.teople.umat.feature.home.data.mockPositionItems
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
     // val myFavoriteList = StateFlow<List<Place>>() this will be used when user add the favorite place
+
+    private val selectedPlace = savedStateHandle.get<String>("selectedPlace")
 
     val tempPlaceList = mockPositionItems
 
@@ -22,6 +33,11 @@ class HomeViewModel : ViewModel() {
     private val _currentCircleRadiusFlow = MutableStateFlow(0.0)
     val currentCircleRadiusFlow = _currentCircleRadiusFlow.asStateFlow()
 
+    init {
+        Gson().fromJson(selectedPlace, CoreGooglePlacesDetailEntity::class.java)?.let {
+            Log.d("selectedPlace", it.toString())
+        }
+    }
 
     fun setCurrentPosition(latLng: LatLng) {
         _currentPositionFlow.value = latLng

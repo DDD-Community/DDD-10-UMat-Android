@@ -14,26 +14,32 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -42,6 +48,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.google.gson.Gson
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcAddFilled
 import com.teople.umat.component.icon.umaticon.IcHomeOutlined
@@ -49,14 +59,20 @@ import com.teople.umat.component.icon.umaticon.IcMyOutlined
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray700
+import com.teople.umat.component.ui.theme.Gray900
+import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.widget.component.UmatSelectBottomSheet
+import com.teople.umat.core.data.entity.CoreGooglePlacesDetailEntity
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
+import com.teople.umat.navigator.NavArgument
 import com.teople.umat.navigator.NavRoute
 import com.teople.umat.screen.AddPlaceBottomSheet
 import com.teople.umat.screen.AddPlaceViewModel
 import com.teople.umat.screen.GuideDialog
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
@@ -83,7 +99,13 @@ fun MainScreen(
             navController = navController,
             startDestination = BottomNavItem.Home.screenRoute,
         ) {
-            composable(BottomNavItem.Home.screenRoute) {
+            composable(
+                route = "${BottomNavItem.Home.screenRoute}?selectedPlace={selectedPlace}",
+                arguments = listOf(navArgument(NavArgument.ARGUMENT_SELECTED_PLACE) {
+                    nullable = true
+                    defaultValue = null
+                })
+            ) {
                 HomeScreen(
                     actionRoute = {
                         actionRoute(it)
@@ -106,7 +128,51 @@ fun MainScreen(
                     }
                 )
             }
-        )
+
+            viewState.selectedPlace != null -> {
+                UmatSelectBottomSheet(
+                    title = stringResource(id = R.string.main_select_place_bottom_sheet_title),
+                    content = {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(viewState.selectedPlace?.photoUrl)
+                                .crossfade(true)
+                                .build(),
+                            placeholder = painterResource(id = com.teople.umat.component.R.drawable.ic_place_holder),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(85.dp)
+                                .clip(CircleShape)
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    vertical = 16.dp
+                                ),
+                            text = viewState.selectedPlace?.displayName?.text ?: "",
+                            style = UmatTheme.typography.pretendardSemiBold16.copy(
+                                color = Gray900
+                            )
+                        )
+                    },
+                    positiveText = stringResource(id = R.string.main_select_place_bottom_sheet_positive),
+                    negativeText = stringResource(id = R.string.main_select_place_bottom_sheet_negative),
+                    actionPositive = {
+                        // 추가하기
+                        navController.navigate(
+                            route = "${BottomNavItem.Home.screenRoute}?selectedPlace=${Gson().toJson(viewState.selectedPlace)}"
+                        )
+                    },
+                    actionNegative = {
+                        // 뒤로가기, 바텀시트 종료
+                        viewModel.removeSelectedPlace()
+                        actionBackPress()
+                    }
+                )
+            }
+        }
     }
 }
 

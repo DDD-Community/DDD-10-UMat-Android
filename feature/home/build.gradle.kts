@@ -63,6 +63,8 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
 
+    implementation(libs.retrofit.gson)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.accompanist.permissions)
