@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 마이페이지 -->
+    <string name="mypage_header_current_date">%s~ (%d일)</string>
+    
+    <string name="mypage_summary_wanted_mine">내가\n가고 싶은 곳</string>
+    <string name="mypage_summary_wanted_yours">네가\n가고 싶은 곳</string>
+    <string name="mypage_summary_wanted_ours">우리 함께\n가고 싶은 곳</string>
+    <string name="mypage_summary_wanted_count">%d개</string>
+
+    <string name="mypage_allergy_default_title">알레르기 음식이 있따면, 상대방에게 알려줄까요?</string>
+    <string name="mypage_allergy_default_register">알레르기 음식 등록하기</string>
+
+    <string name="mypage_allergy_mine_title">내 알레르기</string>
+    <string name="mypage_allergy_yours_title">%s의 알레르기</string>
+
+    <!-- 내 알레르기 관리 -->
+    <string name="mypage_allergy_manage_screen_title">내 알레르기 관리</string>
+
+    <string name="mypage_allergy_manage_title">혹시 음식 알레르기가 있으신가요?</string>
+    <string name="mypage_allergy_manage_subtitle">마이페이지에서 언제든 수정이 가능해요.</string>
+
+    <string-array name="mypage_allergy_manage_items">
+        <item>메일</item>
+        <item>밀</item>
+        <item>대두</item>
+        <item>호두</item>
+        <item>땅콩</item>
+        <item>복숭아</item>
+        <item>토마토</item>
+        <item>돼지고기</item>
+        <item>난류(가금류)</item>
+        <item>우유</item>
+        <item>닭고기</item>
+        <item>쇠고기</item>
+        <item>새우</item>
+        <item>고등어</item>
+        <item>홍합</item>
+        <item>전복</item>
+        <item>굴</item>
+        <item>조개류</item>
+        <item>게</item>
+        <item>오징어</item>
+        <item>아황산 포함식품</item>
+    </string-array>
+
+    <string name="mypage_allergy_manage_confirm">등록 완료</string>
+
+    <!-- 환경 설정 -->
+    <string name="mypage_setting_env_screen_title">환경 설정</string>
+
+    <string name="mypage_setting_env_menu_version">버전 정보</string>
+    <string name="mypage_setting_env_menu_terms_service">이용 약관</string>
+    <string name="mypage_setting_env_menu_logout">로그아웃</string>
+    <string name="mypage_setting_env_menu_withdraw">회원탈퇴</string>
+
+    <!-- 프로필 설정 -->
+    <string name="mypage_setting_profile_screen_title">프로필 설정</string>
+    <string name="mypage_setting_profile_modify_mine_screen_title">내 닉네임 수정</string>
+    <string name="mypage_setting_profile_modify_ours_screen_title">기념일 수정</string>
+
+    <string name="mypage_setting_profile_ours_day">우리의 기념일</string>
+    <string name="mypage_setting_profile_ours_info">우리의 정보</string>
+    <string name="mypage_setting_profile_modify">수정하기</string>
+
+    <string name="mypage_setting_profile_modify_mine_nickname">내 닉네임</string>
+    <string name="mypage_setting_profile_modify_mine_birth">내 생일</string>
+
+    <string name="mypage_setting_profile_modify_ours_title">커플 페이지에 표시될\n기념일을 적어주세요</string>
+    <string name="mypage_setting_profile_modify_ours_day">우리의 기념일</string>
+
+</resources>

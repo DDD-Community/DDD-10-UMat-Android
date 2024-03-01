@@ -17,7 +17,7 @@ android {
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
-    val naverMapApiKey = localProperties.getProperty("api_key") ?: ""
+    val naverMapApiKey = localProperties.getProperty("naver_api_key") ?: ""
 
     defaultConfig {
         applicationId = "com.teople.umat"
@@ -72,8 +72,11 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:daily"))
     implementation(project(":feature:mypage"))
+    implementation(project(":feature:onboarding"))
+    implementation(project(":feature:search"))
     implementation(project(":core:data"))
     implementation(project(":component"))
+    implementation(project(":navigator"))
 
     // Compose
     implementation(platform(libs.compose.bom))
@@ -83,6 +86,8 @@ dependencies {
     implementation(libs.bundles.composeDependency)
     implementation(libs.bundles.coil)
     implementation(libs.bundles.naverMap)
+
+    implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.bundles.coroutines)
 

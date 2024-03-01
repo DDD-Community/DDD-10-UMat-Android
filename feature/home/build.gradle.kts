@@ -50,6 +50,7 @@ dependencies {
     // Module
     implementation(project(":core:data"))
     implementation(project(":component"))
+    implementation(project(":navigator"))
 
     // Compose
     implementation(platform(libs.compose.bom))
@@ -62,6 +63,9 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
 
+    implementation(libs.retrofit.gson)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.accompanist.permissions)
 }
