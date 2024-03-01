@@ -24,14 +24,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.White
 import com.teople.umat.component.widget.preview.UmatPreview
-import com.teople.umat.route.UmatRootRoute
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -59,7 +56,6 @@ class UmatSplashActivity : ComponentActivity() {
 
                     doOnEnd {
                         startActivity(Intent(this@UmatSplashActivity, UmatRootActivity::class.java))
-                        splashScreenView.remove()
                     }
                 }.start()
             }
@@ -108,7 +104,7 @@ fun UmatSplashScreen() {
 
         Image(
             modifier = Modifier.width(120.dp),
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            painter = painterResource(id = R.drawable.ic_splash_logo),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
         )
