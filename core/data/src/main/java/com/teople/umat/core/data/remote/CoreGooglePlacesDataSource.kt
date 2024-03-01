@@ -1,9 +1,6 @@
 package com.teople.umat.core.data.remote
 
-import com.teople.umat.core.data.BuildConfig
 import com.teople.umat.core.data.remote.constant.CoreGoogleMapsField
-import com.teople.umat.core.data.remote.constant.CoreGoogleMapsField.PARAM_PLACES_PLACE_PHOTOS_API_KEY
-import com.teople.umat.core.data.remote.request.CoreGooglePlacesDetailRequest
 import com.teople.umat.core.data.remote.request.CoreGooglePlacesSearchRequest
 import com.teople.umat.core.data.remote.response.CoreGooglePlacesDetailResponse
 import com.teople.umat.core.data.remote.response.CoreGooglePlacesPhotoResponse
@@ -36,12 +33,16 @@ interface CoreGooglePlacesDataSource {
     @GET(CoreGoogleMapsField.URL_PLACES_PLACE_DETAILS)
     suspend fun requestPlaceDetail(
         @Path("placeId") placeId: String,
-        @Body request: CoreGooglePlacesDetailRequest = CoreGooglePlacesDetailRequest()
+        @Query("languageCode") languageCode: String = "ko"
     ): CoreGooglePlacesDetailResponse
 
+    @Headers(
+        CoreGoogleMapsField.HEADER_MAPS_API_KEY
+    )
     @GET(CoreGoogleMapsField.URL_PLACES_PLACE_PHOTOS)
     suspend fun requestPlacePhoto(
-        @Path("name") photoName: String,
-        @Query(PARAM_PLACES_PLACE_PHOTOS_API_KEY) key: String = BuildConfig.GOOGLE_MAPS_API_KEY,
+        @Path("name", encoded = true) photoName: String,
+        @Query("maxHeightPx") heightPx: Int = 1024,
+        @Query("skipHttpRedirect") skipHttpRedirect: Boolean = true
     ): CoreGooglePlacesPhotoResponse
 }
