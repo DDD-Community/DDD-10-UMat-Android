@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Umat</string>
+    <string name="app_name">만나</string>
+
     <string name="home">홈</string>
     <string name="my_page">마이페이지</string>
     <string name="add_place">장소 추가</string>
