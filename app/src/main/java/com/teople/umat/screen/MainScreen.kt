@@ -20,6 +20,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -122,62 +123,62 @@ fun MainScreen(
                 )
             }
         }
+    }
 
-        when {
-            viewState.isShownGuide.not() -> {
-                GuideDialog(
-                    onDismissRequest = {
-                        viewModel.setShownGuideDialog()
-                    }
-                )
-            }
+    when {
+        viewState.isShownGuide.not() -> {
+            GuideDialog(
+                onDismissRequest = {
+                    viewModel.setShownGuideDialog()
+                }
+            )
+        }
 
-            viewState.selectedPlace != null -> {
-                UmatSelectBottomSheet(
-                    title = stringResource(id = R.string.main_select_place_bottom_sheet_title),
-                    content = {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(
-                                    viewState.selectedPlace?.photoUrl?.ifEmpty {
-                                        com.teople.umat.component.R.drawable.ic_place_holder
-                                    }
-                                )
-                                .crossfade(true)
-                                .build(),
-                            placeholder = painterResource(id = com.teople.umat.component.R.drawable.ic_place_holder),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(85.dp)
-                                .clip(CircleShape)
-                        )
-
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    vertical = 16.dp
-                                ),
-                            text = viewState.selectedPlace?.displayName?.text ?: "",
-                            style = UmatTheme.typography.pretendardSemiBold16.copy(
-                                color = Gray900
+        viewState.selectedPlace != null -> {
+            UmatSelectBottomSheet(
+                title = stringResource(id = R.string.main_select_place_bottom_sheet_title),
+                content = {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(
+                                viewState.selectedPlace?.photoUrl?.ifEmpty {
+                                    com.teople.umat.component.R.drawable.ic_place_holder
+                                }
                             )
+                            .crossfade(true)
+                            .build(),
+                        placeholder = painterResource(id = com.teople.umat.component.R.drawable.ic_place_holder),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(85.dp)
+                            .clip(CircleShape)
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .padding(
+                                vertical = 16.dp
+                            ),
+                        text = viewState.selectedPlace?.displayName?.text ?: "",
+                        style = UmatTheme.typography.pretendardSemiBold16.copy(
+                            color = Gray900
                         )
-                    },
-                    positiveText = stringResource(id = R.string.main_select_place_bottom_sheet_positive),
-                    negativeText = stringResource(id = R.string.main_select_place_bottom_sheet_negative),
-                    actionPositive = {
-                        // 추가하기
-                        selectedPlace = viewState.selectedPlace
-                        viewModel.removeSelectedPlace()
-                    },
-                    actionNegative = {
-                        // 뒤로가기, 바텀시트 종료
-                        viewModel.removeSelectedPlace()
-                        actionBackPress()
-                    }
-                )
-            }
+                    )
+                },
+                positiveText = stringResource(id = R.string.main_select_place_bottom_sheet_positive),
+                negativeText = stringResource(id = R.string.main_select_place_bottom_sheet_negative),
+                actionPositive = {
+                    // 추가하기
+                    selectedPlace = viewState.selectedPlace
+                    viewModel.removeSelectedPlace()
+                },
+                actionNegative = {
+                    // 뒤로가기, 바텀시트 종료
+                    viewModel.removeSelectedPlace()
+                    actionBackPress()
+                }
+            )
         }
     }
 }
