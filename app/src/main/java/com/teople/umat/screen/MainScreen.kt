@@ -1,7 +1,6 @@
 package com.teople.umat.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -63,6 +61,7 @@ import com.teople.umat.component.ui.theme.Gray700
 import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.ui.theme.noRippleClickable
 import com.teople.umat.component.widget.component.UmatSelectBottomSheet
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
@@ -168,6 +167,7 @@ fun MainScreen(
                         navController.navigate(
                             route = "${BottomNavItem.Home.screenRoute}?selectedPlace=${Gson().toJson(viewState.selectedPlace)}"
                         )
+                        viewModel.removeSelectedPlace()
                     },
                     actionNegative = {
                         // 뒤로가기, 바텀시트 종료
@@ -246,16 +246,16 @@ fun RowScope.BottomNavButton(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(
-                onClick = {
-                    if (!selected) {
-                        navController.navigate(screen.screenRoute) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                            launchSingleTop = true
-                        }
-                    }
-                })
             .padding(bottom = 14.dp)
+            .noRippleClickable {
+                navController.navigate(screen.screenRoute) {
+                    popUpTo(navController.graph.id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
             .weight(1f)
     ) {
         Column(
