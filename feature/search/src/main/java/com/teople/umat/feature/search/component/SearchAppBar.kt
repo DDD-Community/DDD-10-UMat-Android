@@ -42,20 +42,20 @@ import kotlinx.coroutines.launch
 fun SearchAppBar(
     actionBackPress: () -> Unit,
     actionQueryInput: (query: String) -> Unit,
-    sharedTitle: String? = null
+    sharedQuery: String? = null
 ) {
     val focusRequester = remember {
         FocusRequester()
     }
 
-    var query by rememberSaveable {
-        mutableStateOf(sharedTitle ?: "")
+    var inputQuery by rememberSaveable {
+        mutableStateOf(sharedQuery ?: "")
     }
 
-    LaunchedEffect(key1 = query) {
+    LaunchedEffect(key1 = inputQuery) {
         launch {
-            if (query.isNotBlank()) {
-                actionQueryInput(query)
+            if (inputQuery.isNotBlank()) {
+                actionQueryInput(inputQuery)
             }
         }
     }
@@ -80,9 +80,9 @@ fun SearchAppBar(
         ) {
             BasicTextField(
                 modifier = Modifier.focusRequester(focusRequester),
-                value = query,
+                value = inputQuery,
                 onValueChange = { searchQuery ->
-                    query = searchQuery
+                    inputQuery = searchQuery
                 },
                 decorationBox = { innerTextField ->
                     Row(
@@ -104,7 +104,7 @@ fun SearchAppBar(
                         Box(
                             modifier = Modifier.weight(1f)
                         ) {
-                            if (query.isEmpty()) {
+                            if (inputQuery.isEmpty()) {
                                 Text(
                                     modifier = Modifier,
                                     text = stringResource(id = R.string.search_app_bar_hint),

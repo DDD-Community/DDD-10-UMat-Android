@@ -61,7 +61,8 @@ import com.teople.umat.screen.GuideDialog
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     actionRoute: (route: NavRoute) -> Unit,
-    sharedTitle: String? = null
+    sharedTitle: String? = null,
+    actionBackPress: () -> Unit
 ) {
     val navController = rememberNavController()
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()

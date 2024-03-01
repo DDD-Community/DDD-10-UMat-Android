@@ -36,9 +36,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
+    sharedQuery: String? = null,
+    actionSharedQueryDone: () -> Unit,
     actionItemClick: (CoreGooglePlacesSearchEntity.Place) -> Unit,
     actionBackPress: () -> Unit,
-    sharedTitle: String? = null
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -59,10 +60,6 @@ fun SearchScreen(
         actionBackPress()
     }
 
-    sharedTitle?.let {
-        viewModel.searchQueryInput(it)
-    }
-
     Scaffold(
         topBar = {
             SearchAppBar(
@@ -71,8 +68,9 @@ fun SearchScreen(
                 },
                 actionQueryInput = { query ->
                     viewModel.searchQueryInput(query)
+                    actionSharedQueryDone()
                 },
-                sharedTitle = sharedTitle
+                sharedQuery = sharedQuery
             )
         }
     ) { paddingValues ->
@@ -136,6 +134,8 @@ fun SearchScreen(
 private fun SearchScreenPreview() {
     UmatPreview {
         SearchScreen(
+            sharedQuery = "",
+            actionSharedQueryDone = {},
             actionItemClick = {},
             actionBackPress = {}
         )
