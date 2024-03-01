@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -29,9 +30,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -41,6 +44,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.teople.umat.component.R
 import com.teople.umat.component.ui.theme.Both
 import com.teople.umat.component.ui.theme.Gradient
@@ -52,7 +57,7 @@ import com.teople.umat.component.ui.theme.UmatTypography
 
 @Composable
 fun UmatItemCard(
-    image: Painter,
+    photoUrl: String,
     name: String,
     location: String,
     isWin: Boolean,
@@ -71,10 +76,19 @@ fun UmatItemCard(
             .padding(16.dp)
     ) {
         Row {
-            Image(
-                painter = image,
-                contentDescription = "",
-                modifier = Modifier.size(56.dp)
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(
+                        photoUrl
+                    )
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(id = R.drawable.ic_place_holder),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(
@@ -114,8 +128,10 @@ fun UmatItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 val openText = buildAnnotatedString {
-                    withStyle(UmatTypography().pretendardSemiBold12.toSpanStyle().copy(color = Both)) {
-                        append("오늘 영업시간 ")
+                    withStyle(
+                        UmatTypography().pretendardSemiBold12.toSpanStyle().copy(color = Both)
+                    ) {
+                        append("오늘 영업시간  ")
                     }
                     withStyle(UmatTypography().pretendardRegular12.toSpanStyle()) {
                         append(open)
@@ -127,9 +143,15 @@ fun UmatItemCard(
                     onClick = { expandStatus = !expandStatus }
                 ) {
                     if (expandStatus) {
-                        Image(painter = painterResource(id = R.drawable.ic_less_outlined), contentDescription = "")
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_less_outlined),
+                            contentDescription = ""
+                        )
                     } else {
-                        Image(painter = painterResource(id = R.drawable.ic_more_outlined), contentDescription = "")
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_more_outlined),
+                            contentDescription = ""
+                        )
                     }
                 }
             }
@@ -193,7 +215,12 @@ fun UmatItemCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color.White, shape = RoundedCornerShape(1.dp))
-                .border(BorderStroke(width = 1.dp, brush = if (isLike) Gradient else SolidColor(Gray300)), shape = RoundedCornerShape(8.dp))
+                .border(
+                    BorderStroke(
+                        width = 1.dp,
+                        brush = if (isLike) Gradient else SolidColor(Gray300)
+                    ), shape = RoundedCornerShape(8.dp)
+                )
                 .padding(vertical = 10.dp)
                 .clickable {
                     onClickAction()
@@ -208,7 +235,7 @@ fun UmatItemCard(
 @Composable
 fun UmatItemCardPreview() {
     UmatItemCard(
-        image = painterResource(id = R.drawable.ic_location_check_filled),
+        photoUrl = "",
         name = "블루도어독스",
         location = "서울시 용산구 한남동 738-20",
         isWin = false,
@@ -233,7 +260,7 @@ fun UmatItemCardPreview() {
 @Composable
 fun UmatItemCardPreview2() {
     UmatItemCard(
-        image = painterResource(id = R.drawable.ic_location_check_filled),
+        photoUrl = "",
         name = "블루도어독스",
         location = "서울시 용산구 한남동 738-20",
         isWin = true,
@@ -258,7 +285,7 @@ fun UmatItemCardPreview2() {
 @Composable
 fun UmatItemCardPreview3() {
     UmatItemCard(
-        image = painterResource(id = R.drawable.ic_location_check_filled),
+        photoUrl = "",
         name = "블루도어독스",
         location = "서울시 용산구 한남동 738-20",
         isWin = false,
@@ -283,7 +310,7 @@ fun UmatItemCardPreview3() {
 @Composable
 fun UmatItemCardPreview4() {
     UmatItemCard(
-        image = painterResource(id = R.drawable.ic_location_check_filled),
+        photoUrl = "",
         name = "블루도어독스",
         location = "서울시 용산구 한남동 738-20",
         isWin = true,
