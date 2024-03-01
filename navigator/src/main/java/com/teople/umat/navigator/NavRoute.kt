@@ -15,8 +15,4 @@ sealed class NavRoute(
     data object Search: NavRoute(
         NavDirection.ROUTE_SEARCH
     )
-
-    data object SharedTitleSearch: NavRoute(
-        NavDirection.ROUTE_SHARED_TITLE_SEARCH
-    )
 }

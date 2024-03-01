@@ -1,4 +1,4 @@
-package com.teople.umat.screen
+package com.teople.umat.screen.component
 
 import android.view.Gravity
 import androidx.compose.foundation.ExperimentalFoundationApi

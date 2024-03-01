@@ -6,4 +6,9 @@
     <string name="share_by_map">지도앱에서 공유하기로 추가</string>
     <string name="move_to_naver_map">네이버 지도 앱으로 이동합니다</string>
     <string name="view_guide">방법 보기</string>
+
+    <string name="main_select_place_bottom_sheet_title">위시 플레이스 추가</string>
+    <string name="main_select_place_bottom_sheet_negative">뒤로가기</string>
+    <string name="main_select_place_bottom_sheet_positive">추가하기</string>
+
 </resources>

@@ -55,7 +55,7 @@ class UmatSplashActivity : ComponentActivity() {
                     splashScreenView, View.TRANSLATION_Y, 0f, 0f, 0f
                 ).apply {
                     interpolator = AnticipateInterpolator()
-                    duration = 1500L
+                    duration = SPLASH_DELAY
 
                     doOnEnd {
                         startActivity(Intent(this@UmatSplashActivity, UmatRootActivity::class.java))
@@ -70,7 +70,7 @@ class UmatSplashActivity : ComponentActivity() {
 
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                    delay(1500L)
+                    delay(SPLASH_DELAY)
                     Intent(
                         this@UmatSplashActivity,
                         UmatRootActivity::class.java
@@ -81,6 +81,10 @@ class UmatSplashActivity : ComponentActivity() {
         }
 
         super.onCreate(savedInstanceState)
+    }
+
+    companion object {
+        private const val SPLASH_DELAY = 1500L
     }
 }
 

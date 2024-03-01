@@ -18,7 +18,6 @@ rootProject.name = "Umat"
 include(":app")
 include(":component")
 include(":core:data")
-include(":feature:main")
 include(":feature:home")
 include(":feature:daily")
 include(":feature:mypage")
