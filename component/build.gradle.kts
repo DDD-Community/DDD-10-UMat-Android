@@ -47,6 +47,7 @@ dependencies {
 
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.compose)
+    implementation(libs.bundles.coil)
 
     implementation(libs.google.appcompanist.systemuicontroller)
 }

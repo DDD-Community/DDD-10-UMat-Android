@@ -31,6 +31,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".UmatRootActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Umat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -38,10 +44,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".UmatRootActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Umat.NoActionBar" />
 
     </application>
 
