@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -71,15 +73,19 @@ import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcFilterMe
 import com.teople.umat.component.icon.umaticon.IcFilterOur
 import com.teople.umat.component.icon.umaticon.IcFilterYou
+import com.teople.umat.component.icon.umaticon.IcSadFilled
+import com.teople.umat.component.ui.theme.Blue300
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.widget.component.UmatItemCard
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LAT
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
 import com.teople.umat.feature.home.component.HomeSearchBar
+import com.teople.umat.feature.home.data.MockPositionItem
 import com.teople.umat.feature.home.data.mockPositionItems
 import com.teople.umat.navigator.NavRoute
 import kotlinx.coroutines.Dispatchers
@@ -150,6 +156,7 @@ fun HomeScreen(
 
     val currentCameraPosition = viewModel.currentCameraPositionFlow.collectAsState()
     val currentRadius = viewModel.currentCircleRadiusFlow.collectAsState()
+    var currentWishTypeState by remember { mutableStateOf(WishType.WISH_OUR) }
 
     BottomSheetScaffold(
         modifier = Modifier,
@@ -157,7 +164,11 @@ fun HomeScreen(
         sheetContent = {
             UmatBottomSheetScreen(
                 homeViewModel = viewModel,
-                currentPosition = currentCameraPosition.value
+                currentPosition = currentCameraPosition.value,
+                selectedButton = currentWishTypeState,
+                onClickButton = {
+                    currentWishTypeState = it
+                }
             )
         },
         scaffoldState = scaffoldState,
@@ -199,7 +210,14 @@ fun HomeScreen(
                                     WishType.WISH_ME -> com.teople.umat.component.R.drawable.ic_pin_my
                                     else -> com.teople.umat.component.R.drawable.ic_pin_your
                                 }
-                            )
+                            ),
+                            onClick = {
+                                coroutineScope.launch {
+                                    currentWishTypeState = item.type
+                                    scaffoldState.bottomSheetState.expand()
+                                }
+                                true
+                            }
                         )
                     }
                 }
@@ -239,10 +257,11 @@ fun HomeScreen(
 @Composable
 fun UmatBottomSheetScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
-    currentPosition: LatLng
+    currentPosition: LatLng,
+    selectedButton: WishType,
+    onClickButton: (WishType) -> Unit
 ) {
     val context = LocalContext.current
-    var selectedButton by remember { mutableStateOf(WishType.WISH_OUR) }
     var currentPositionKoreanState by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
@@ -251,69 +270,108 @@ fun UmatBottomSheetScreen(
         }
         currentPositionKoreanState = newPosition
     }
-    Column(
+    val currentItems = homeViewModel.currentBoundItemsFlow.collectAsState()
+    var currentSelectedUserItems by remember { mutableStateOf(listOf<MockPositionItem>()) }
+    when (selectedButton) {
+        WishType.WISH_OUR -> {
+            currentSelectedUserItems = currentItems.value.filter {
+                it.type == WishType.WISH_OUR
+            }
+        }
+
+        WishType.WISH_ME -> {
+            currentSelectedUserItems = currentItems.value.filter {
+                it.type == WishType.WISH_ME
+            }
+        }
+
+        WishType.WISH_YOUR -> {
+            currentSelectedUserItems = currentItems.value.filter {
+                it.type == WishType.WISH_YOUR
+            }
+        }
+    }
+    LazyColumn(
         modifier = Modifier
             .fillMaxHeight(0.8f)
             .background(Color.White)
     ) {
-        Row(modifier = Modifier.padding(start = 20.dp)) {
-            Text("현위치", style = UmatTypography().pretendardBold12, color = Gray300)
+        item {
+            Row(modifier = Modifier.padding(start = 20.dp)) {
+                Text("현위치", style = UmatTypography().pretendardBold12, color = Gray300)
+                Text(
+                    currentPositionKoreanState,
+                    style = UmatTypography().pretendardBold12,
+                    color = Color.Black,
+                    modifier = Modifier.padding(start = 2.dp)
+                ) // TODO : 현위치 가져오기
+            }
             Text(
-                currentPositionKoreanState,
-                style = UmatTypography().pretendardBold12,
-                color = Color.Black,
-                modifier = Modifier.padding(start = 2.dp)
-            ) // TODO : 현위치 가져오기
+                text = "총 %d 개의 장소".format(
+                    homeViewModel.getCurrentPositionFavoriteCount(currentPosition)
+                ),
+                style = UmatTypography().pretendardSemiBold18,
+                modifier = Modifier.padding(start = 20.dp, top = 6.dp)
+            )
+            Divider(
+                modifier = Modifier
+                    .padding(top = 12.dp, bottom = 14.dp)
+                    .padding(horizontal = 16.dp),
+                color = Gray100
+            )
+            Row(
+                modifier = Modifier.padding(start = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                WishPlaceButton(
+                    wishType = WishType.WISH_OUR,
+                    count = homeViewModel.getCurrentPositionFavoriteCountByType(
+                        type = WishType.WISH_OUR,
+                        currentPosition = currentPosition
+                    ),
+                    isSelected = selectedButton == WishType.WISH_OUR,
+                    onClickButton = { onClickButton(WishType.WISH_OUR) }
+                )
+                WishPlaceButton(
+                    wishType = WishType.WISH_ME,
+                    count = homeViewModel.getCurrentPositionFavoriteCountByType(
+                        type = WishType.WISH_ME,
+                        currentPosition = currentPosition
+                    ),
+                    isSelected = selectedButton == WishType.WISH_ME,
+                    onClickButton = {
+                        onClickButton(WishType.WISH_ME)
+                    })
+                WishPlaceButton(
+                    wishType = WishType.WISH_YOUR,
+                    count = homeViewModel.getCurrentPositionFavoriteCountByType(
+                        type = WishType.WISH_YOUR,
+                        currentPosition = currentPosition
+                    ),
+                    isSelected = selectedButton == WishType.WISH_YOUR,
+                    onClickButton = {
+                        onClickButton(WishType.WISH_YOUR)
+                    })
+            }
         }
-        Text(
-            text = "총 %d 개의 장소".format(
-                homeViewModel.getCurrentPositionFavoriteCount(currentPosition)
-            ),
-            style = UmatTypography().pretendardSemiBold18,
-            modifier = Modifier.padding(start = 20.dp, top = 6.dp)
-        )
-        Divider(
-            modifier = Modifier
-                .padding(top = 12.dp, bottom = 14.dp)
-                .padding(horizontal = 16.dp),
-            color = Gray100
-        )
-        Row(
-            modifier = Modifier.padding(start = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            WishPlaceButton(
-                wishType = WishType.WISH_OUR,
-                count = homeViewModel.getCurrentPositionFavoriteCountByType(
-                    type = WishType.WISH_OUR,
-                    currentPosition = currentPosition
-                ),
-                isSelected = selectedButton == WishType.WISH_OUR,
-                onClickButton = {
-                    selectedButton = WishType.WISH_OUR
-                })
-            WishPlaceButton(
-                wishType = WishType.WISH_ME,
-                count = homeViewModel.getCurrentPositionFavoriteCountByType(
-                    type = WishType.WISH_ME,
-                    currentPosition = currentPosition
-                ),
-                isSelected = selectedButton == WishType.WISH_ME,
-                onClickButton = {
-                    selectedButton = WishType.WISH_ME
-                })
-            WishPlaceButton(
-                wishType = WishType.WISH_YOUR,
-                count = homeViewModel.getCurrentPositionFavoriteCountByType(
-                    type = WishType.WISH_YOUR,
-                    currentPosition = currentPosition
-                ),
-                isSelected = selectedButton == WishType.WISH_YOUR,
-                onClickButton = {
-                    selectedButton = WishType.WISH_YOUR
-                })
+        if (currentSelectedUserItems.isEmpty()) {
+            item {
+                EmptyScreen()
+            }
+        } else {
+            items(currentSelectedUserItems.size) {
+                UmatItemCard(
+                    image = painterResource(id = com.teople.umat.component.R.drawable.temp),
+                    name = currentSelectedUserItems[it].title,
+                    location = "서울시 강남구",
+                    isWin = false,
+                    isLike = true,
+                    open = "오픈",
+                    buttonText = "여기 가볼래"
+                ) {
+                }
+            }
         }
-        EmptyScreen()
     }
 }
 
@@ -358,44 +416,36 @@ fun WishPlaceButton(
 }
 
 @Composable
-fun EmptyScreen(
-    titleText: String = stringResource(R.string.empty_title_our),
-    onClickButton: () -> Unit = {}
-) {
+fun EmptyScreen() {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .padding(top = 80.dp)
+            .fillMaxSize()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.align(Alignment.Center)
         ) {
+            Icon(
+                imageVector = UmatIcon.IcSadFilled,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .size(43.dp),
+                tint = Blue300
+            )
             Text(
-                text = "앗, 아직 정해진 곳이 없네요..!",
+                text = "이런, 상대방이 저장한 위시 플레이스가 없네요!",
                 style = UmatTypography().pretendardSemiBold12,
                 modifier = Modifier.padding(bottom = 8.dp),
                 color = Gray400
             )
             Text(
-                text = titleText,
+                text = "상대방에게 가고 싶은 장소가 있는지 \n" +
+                        "쿡 찔러 보는 건 어때요?",
                 style = UmatTypography().pretendardSemiBold16,
                 color = Gray800,
                 textAlign = TextAlign.Center
-            )
-            Text(
-                text = "시작하기",
-                style = UmatTypography().pretendardSemiBold16,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(top = 18.dp)
-                    .clickable {
-                        onClickButton()
-                    }
-                    .border(
-                        1.dp,
-                        color = Gray300,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
             )
         }
     }
@@ -459,7 +509,10 @@ enum class WishType(
 @Composable
 fun UmatBottomSheet() {
     UmatBottomSheetScreen(
-        currentPosition = LatLng(SEOUL_LAT, SEOUL_LNG)
+        currentPosition = LatLng(SEOUL_LAT, SEOUL_LNG),
+        selectedButton = WishType.WISH_OUR,
+        onClickButton = {}
+
     )
 }
 

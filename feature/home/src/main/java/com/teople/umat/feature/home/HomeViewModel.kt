@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.teople.umat.core.data.entity.CoreGooglePlacesDetailEntity
+import com.teople.umat.feature.home.data.MockPositionItem
 import com.teople.umat.feature.home.data.mockPositionItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,9 @@ class HomeViewModel @Inject constructor(
 
     private val _currentCircleRadiusFlow = MutableStateFlow(0.0)
     val currentCircleRadiusFlow = _currentCircleRadiusFlow.asStateFlow()
+
+    private val _currentBoundItemsFlow = MutableStateFlow(listOf<MockPositionItem>())
+    val currentBoundItemsFlow = _currentBoundItemsFlow.asStateFlow()
 
     init {
         Gson().fromJson(selectedPlace, CoreGooglePlacesDetailEntity::class.java)?.let {
@@ -65,6 +69,7 @@ class HomeViewModel @Inject constructor(
     fun getCurrentPositionFavoriteCount(currentPosition: LatLng): Int {
         return tempPlaceList
             .filter { currentPosition.distanceTo(it.latLng) <= _currentCircleRadiusFlow.value }
+            .also { _currentBoundItemsFlow.value = it }
             .size
     }
 
