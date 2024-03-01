@@ -4,6 +4,7 @@ data class CoreGooglePlacesDetailEntity(
     val id: String,
     val displayName: DisplayName,
     val formattedAddress: String,
+    val location: Location,
     val photoUrl: String,
     val priceLevel: PriceLevel,
     val hours: Hour,
@@ -12,6 +13,11 @@ data class CoreGooglePlacesDetailEntity(
     data class DisplayName(
         val text: String,
         val languageCode: String
+    )
+
+    data class Location(
+        val latitude: Double,
+        val longitude: Double
     )
 
     data class Hour(
