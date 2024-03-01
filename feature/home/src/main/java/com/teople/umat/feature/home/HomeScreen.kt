@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -71,15 +73,19 @@ import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcFilterMe
 import com.teople.umat.component.icon.umaticon.IcFilterOur
 import com.teople.umat.component.icon.umaticon.IcFilterYou
+import com.teople.umat.component.icon.umaticon.IcSadFilled
+import com.teople.umat.component.ui.theme.Blue300
 import com.teople.umat.component.ui.theme.Gray100
 import com.teople.umat.component.ui.theme.Gray300
 import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.widget.component.UmatItemCard
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LAT
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
 import com.teople.umat.feature.home.component.HomeSearchBar
+import com.teople.umat.feature.home.data.MockPositionItem
 import com.teople.umat.feature.home.data.mockPositionItems
 import com.teople.umat.navigator.NavRoute
 import kotlinx.coroutines.Dispatchers
@@ -348,18 +354,22 @@ fun UmatBottomSheetScreen(
                     })
             }
         }
-
-        items(currentSelectedUserItems.size) {
-            UmatItemCard(
-                image = painterResource(id = com.teople.umat.component.R.drawable.temp),
-                name = currentSelectedUserItems[it].title,
-                location = "서울시 강남구",
-                isWin = false,
-                isLike = true,
-                open = "오픈",
-                buttonText = "여기 가볼래"
-            ) {
-
+        if (currentSelectedUserItems.isEmpty()) {
+            item {
+                EmptyScreen()
+            }
+        } else {
+            items(currentSelectedUserItems.size) {
+                UmatItemCard(
+                    image = painterResource(id = com.teople.umat.component.R.drawable.temp),
+                    name = currentSelectedUserItems[it].title,
+                    location = "서울시 강남구",
+                    isWin = false,
+                    isLike = true,
+                    open = "오픈",
+                    buttonText = "여기 가볼래"
+                ) {
+                }
             }
         }
     }
@@ -406,44 +416,36 @@ fun WishPlaceButton(
 }
 
 @Composable
-fun EmptyScreen(
-    titleText: String = stringResource(R.string.empty_title_our),
-    onClickButton: () -> Unit = {}
-) {
+fun EmptyScreen() {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .padding(top = 80.dp)
+            .fillMaxSize()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.align(Alignment.Center)
         ) {
+            Icon(
+                imageVector = UmatIcon.IcSadFilled,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .size(43.dp),
+                tint = Blue300
+            )
             Text(
-                text = "앗, 아직 정해진 곳이 없네요..!",
+                text = "이런, 상대방이 저장한 위시 플레이스가 없네요!",
                 style = UmatTypography().pretendardSemiBold12,
                 modifier = Modifier.padding(bottom = 8.dp),
                 color = Gray400
             )
             Text(
-                text = titleText,
+                text = "상대방에게 가고 싶은 장소가 있는지 \n" +
+                        "쿡 찔러 보는 건 어때요?",
                 style = UmatTypography().pretendardSemiBold16,
                 color = Gray800,
                 textAlign = TextAlign.Center
-            )
-            Text(
-                text = "시작하기",
-                style = UmatTypography().pretendardSemiBold16,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(top = 18.dp)
-                    .clickable {
-                        onClickButton()
-                    }
-                    .border(
-                        1.dp,
-                        color = Gray300,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
             )
         }
     }
