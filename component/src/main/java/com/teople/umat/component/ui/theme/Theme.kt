@@ -1,12 +1,23 @@
 package com.teople.umat.component.ui.theme
 
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.IndicationInstance
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
@@ -62,7 +73,8 @@ fun UmatTheme(
 
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
-        LocalTypography provides typography
+        LocalTypography provides typography,
+        LocalRippleTheme provides CustomRippleTheme
     ) {
         ProvideTextStyle(value = typography.lineSeedBold20, content = content)
     }
@@ -80,6 +92,50 @@ fun UmatTheme(
                 color = rememberedColors.background,
                 darkIcons = useDarkIcons
             )
+        }
+    }
+}
+
+@Immutable
+private object CustomRippleTheme : RippleTheme {
+
+    @Composable
+    override fun defaultColor() = Color.Unspecified
+
+    @Composable
+    override fun rippleAlpha() = RippleAlpha(
+        draggedAlpha = 0.0f,
+        focusedAlpha = 0.0f,
+        hoveredAlpha = 0.0f,
+        pressedAlpha = 0.0f,
+    )
+}
+
+@Immutable
+object CustomIndication: Indication {
+
+    @Immutable
+    private class DefaultIndicationInstance(
+        private val isPressed: State<Boolean>
+    ) : IndicationInstance {
+        override fun ContentDrawScope.drawIndication() {
+            drawContent()
+            if (isPressed.value) {
+                drawRect(
+                    color = Gray500.copy(
+                        alpha = 0.1f
+                    ),
+                    size = size
+                )
+            }
+        }
+    }
+
+    @Composable
+    override fun rememberUpdatedInstance(interactionSource: InteractionSource): IndicationInstance {
+        val isPressed = interactionSource.collectIsPressedAsState()
+        return remember(interactionSource) {
+            DefaultIndicationInstance(isPressed)
         }
     }
 }

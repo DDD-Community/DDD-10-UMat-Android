@@ -2,7 +2,6 @@ package com.teople.umat.feature.home.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -30,6 +28,7 @@ import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.component.ui.theme.White
+import com.teople.umat.component.ui.theme.noRippleClickable
 import com.teople.umat.component.widget.preview.UmatPreview
 import com.teople.umat.feature.home.R
 
@@ -64,10 +63,7 @@ fun HomeSearchBar(
                     color = White,
                     shape = RoundedCornerShape(6.dp)
                 )
-                .clip(
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .clickable {
+                .noRippleClickable {
                     actionSearchClick()
                 }
                 .padding(

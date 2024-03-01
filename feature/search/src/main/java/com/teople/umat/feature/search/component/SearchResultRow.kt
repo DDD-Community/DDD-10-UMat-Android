@@ -2,7 +2,6 @@ package com.teople.umat.feature.search.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +22,7 @@ import com.teople.umat.component.ui.theme.Gray200
 import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray950
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.ui.theme.noRippleClickable
 import com.teople.umat.component.widget.preview.UmatPreview
 import com.teople.umat.core.data.entity.CoreGooglePlacesSearchEntity
 
@@ -34,10 +34,10 @@ fun SearchResultRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(18.dp)
-            .clickable {
+            .noRippleClickable {
                 actionItemClick(item)
-            },
+            }
+            .padding(18.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {

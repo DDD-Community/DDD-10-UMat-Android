@@ -81,6 +81,7 @@ import com.teople.umat.component.ui.theme.Gray400
 import com.teople.umat.component.ui.theme.Gray600
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.UmatTypography
+import com.teople.umat.component.ui.theme.noRippleClickable
 import com.teople.umat.component.widget.component.UmatItemCard
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LAT
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
@@ -237,10 +238,11 @@ fun HomeScreen(
                 CurrentPositionButton(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .clickable {
+                        .noRippleClickable {
                             drawCurrentPositionCircle()
                             currentPositionBoundRequested = true
-                        })
+                        }
+                )
             }
         }
     }
