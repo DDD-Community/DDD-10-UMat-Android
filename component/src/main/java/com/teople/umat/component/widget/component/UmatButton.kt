@@ -1,4 +1,4 @@
-package com.teople.umat.component.widget
+package com.teople.umat.component.widget.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.teople.umat.component.R
 
 @Composable
-fun ComponentButton(
+fun UmatButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     text: String,
@@ -51,9 +51,9 @@ fun ComponentButton(
 
 @Preview
 @Composable
-fun ComponentButtonPreview() {
+fun UmatButtonPreview() {
     val painter = painterResource(id = R.drawable.ic_apple)
-    ComponentButton(
+    UmatButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,7 +37,7 @@ import com.teople.umat.component.ui.theme.Gray500
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.UmatTheme
-import com.teople.umat.component.widget.ComponentButton
+import com.teople.umat.component.widget.component.UmatButton
 import com.teople.umat.component.widget.component.UmatAppBar
 import com.teople.umat.component.widget.component.UmatLabel
 import com.teople.umat.component.widget.preview.UmatPreview
@@ -86,7 +84,7 @@ fun MypageSettingAllergyScreen() {
             )
         },
         bottomBar = {
-            ComponentButton(
+            UmatButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
