@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -88,9 +89,9 @@ import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LAT
 import com.teople.umat.feature.home.HomeViewModel.Companion.SEOUL_LNG
 import com.teople.umat.feature.home.component.HomeSearchBar
 import com.teople.umat.feature.home.data.MockPositionItem
-import com.teople.umat.feature.home.data.mockPositionItems
 import com.teople.umat.navigator.NavRoute
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -102,15 +103,9 @@ import java.util.Locale
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     actionRoute: (route: NavRoute) -> Unit,
-    sharedTitle: String? = null
+    sharedTitle: String? = null,
+    selectedPlace: CoreGooglePlacesDetailEntity? = null
 ) {
-//    val locationPermissionState =
-//        rememberPermissionState(Manifest.permission.ACCESS_COARSE_LOCATION)
-//    if (locationPermissionState.status.isGranted) {
-//
-//    } else {
-//
-//    }
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -134,7 +129,7 @@ fun HomeScreen(
     }
 
     var currentPositionBoundRequested by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
     val currentScreenSize = LocalConfiguration.current.screenWidthDp
@@ -159,6 +154,16 @@ fun HomeScreen(
     val currentCameraPosition = viewModel.currentCameraPositionFlow.collectAsState()
     val currentRadius = viewModel.currentCircleRadiusFlow.collectAsState()
     var currentWishTypeState by remember { mutableStateOf(WishType.WISH_OUR) }
+
+    LaunchedEffect(selectedPlace) {
+        viewModel.requestSelectedPlace(selectedPlace)
+    }
+
+    coroutineScope.launch {
+        viewModel.selectedPlaceFlow.flowWithLifecycle(lifecycle).filterNotNull().collect {
+            currentWishTypeState = WishType.WISH_ME
+        }
+    }
 
     BottomSheetScaffold(
         modifier = Modifier,
@@ -198,7 +203,7 @@ fun HomeScreen(
                         radius = currentRadius.value,
                         color = Gray600.copy(alpha = 0.16f)
                     )
-                    for (item in mockPositionItems) {
+                    for (item in viewModel.tempPlaceList) {
                         if (!viewModel.isPositionInBound(
                                 item.googlePlaceItem.location.toLatLng(),
                                 currentCameraPosition.value

@@ -46,10 +46,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.gson.Gson
 import com.teople.umat.R
 import com.teople.umat.component.icon.UmatIcon
 import com.teople.umat.component.icon.umaticon.IcAddFilled
@@ -63,9 +61,9 @@ import com.teople.umat.component.ui.theme.UmatTheme
 import com.teople.umat.component.ui.theme.UmatTypography
 import com.teople.umat.component.ui.theme.noRippleClickable
 import com.teople.umat.component.widget.component.UmatSelectBottomSheet
+import com.teople.umat.core.data.entity.CoreGooglePlacesDetailEntity
 import com.teople.umat.feature.home.HomeScreen
 import com.teople.umat.feature.mypage.MypageScreen
-import com.teople.umat.navigator.NavArgument
 import com.teople.umat.navigator.NavRoute
 import com.teople.umat.screen.component.AddPlaceBottomSheet
 import com.teople.umat.screen.component.AddPlaceViewModel
@@ -81,6 +79,10 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
+
+    var selectedPlace by remember {
+        mutableStateOf<CoreGooglePlacesDetailEntity?>(null)
+    }
 
     Scaffold(
         // enableEdgeToEdge 로 인한 바텀 네비게이션 영역 패딩 필요
@@ -99,17 +101,19 @@ fun MainScreen(
             startDestination = BottomNavItem.Home.screenRoute,
         ) {
             composable(
-                route = "${BottomNavItem.Home.screenRoute}?selectedPlace={selectedPlace}",
-                arguments = listOf(navArgument(NavArgument.ARGUMENT_SELECTED_PLACE) {
-                    nullable = true
-                    defaultValue = null
-                })
+                route = BottomNavItem.Home.screenRoute,
+//                route = "${BottomNavItem.Home.screenRoute}?selectedPlace={selectedPlace}",
+//                arguments = listOf(navArgument(NavArgument.ARGUMENT_SELECTED_PLACE) {
+//                    nullable = true
+//                    defaultValue = null
+//                })
             ) {
                 HomeScreen(
                     actionRoute = {
                         actionRoute(it)
                     },
-                    sharedTitle = sharedTitle
+                    sharedTitle = sharedTitle,
+                    selectedPlace = selectedPlace
                 )
             }
             composable(BottomNavItem.MyPage.screenRoute) {
@@ -164,9 +168,7 @@ fun MainScreen(
                     negativeText = stringResource(id = R.string.main_select_place_bottom_sheet_negative),
                     actionPositive = {
                         // 추가하기
-                        navController.navigate(
-                            route = "${BottomNavItem.Home.screenRoute}?selectedPlace=${Gson().toJson(viewState.selectedPlace)}"
-                        )
+                        selectedPlace = viewState.selectedPlace
                         viewModel.removeSelectedPlace()
                     },
                     actionNegative = {
