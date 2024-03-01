@@ -20,8 +20,8 @@ data class CoreGooglePlacesDetailResponse(
     )
 
     data class Location(
-        @SerializedName("latitude") val latitude: Number?,
-        @SerializedName("longitude") val longitude: Number?
+        @SerializedName("latitude") val latitude: Double?,
+        @SerializedName("longitude") val longitude: Double?
     )
 
     data class Photo(
@@ -75,8 +75,8 @@ data class CoreGooglePlacesDetailResponse(
                     languageCode = displayName?.languageCode.orEmpty()
                 ),
                 location = CoreGooglePlacesDetailEntity.Location(
-                    latitude = location?.latitude ?: -1,
-                    longitude = location?.longitude ?: -1
+                    latitude = location?.latitude ?: 0.0,
+                    longitude = location?.longitude ?: 0.0
                 ),
                 formattedAddress = formattedAddress.orEmpty(),
                 photoUrl = photoUrl,

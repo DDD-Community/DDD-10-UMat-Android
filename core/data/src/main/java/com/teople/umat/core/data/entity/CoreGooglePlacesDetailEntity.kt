@@ -16,8 +16,8 @@ data class CoreGooglePlacesDetailEntity(
     )
 
     data class Location(
-        val latitude: Number,
-        val longitude: Number
+        val latitude: Double,
+        val longitude: Double
     )
 
     data class Hour(
