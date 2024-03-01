@@ -38,13 +38,13 @@ class UmatSplashActivity : ComponentActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        actionBar?.hide()
+
         enableEdgeToEdge()
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
 
             splashScreen.setOnExitAnimationListener { splashScreenView ->
-
-                actionBar?.hide()
 
                 splashScreenView.background = getDrawable(R.drawable.img_splash_background)
 
@@ -56,6 +56,7 @@ class UmatSplashActivity : ComponentActivity() {
 
                     doOnEnd {
                         startActivity(Intent(this@UmatSplashActivity, UmatRootActivity::class.java))
+                        finish()
                     }
                 }.start()
             }
@@ -67,10 +68,7 @@ class UmatSplashActivity : ComponentActivity() {
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
                     delay(SPLASH_DELAY)
-                    Intent(
-                        this@UmatSplashActivity,
-                        UmatRootActivity::class.java
-                    ).let(::startActivity)
+                    startActivity(Intent(this@UmatSplashActivity, UmatRootActivity::class.java))
                     finish()
                 }
             }

@@ -1,5 +1,6 @@
 package com.teople.umat.route
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +25,10 @@ fun UmatRootRoute(
 ) {
     var sharedQuery by rememberSaveable {
         mutableStateOf(sharedTitle)
+    }
+
+    BackHandler {
+        // TODO("Activity Finish & SplashActivity Issue")
     }
 
     NavHost(

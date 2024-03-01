@@ -54,7 +54,7 @@ import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.Orange500
 import com.teople.umat.component.ui.theme.UmatTheme
-import com.teople.umat.component.widget.ComponentButton
+import com.teople.umat.component.widget.component.UmatButton
 import com.teople.umat.component.widget.component.UmatAppBar
 import com.teople.umat.component.widget.component.UmatBadge
 import com.teople.umat.component.widget.component.UmatBadgeDefaults
@@ -360,7 +360,7 @@ private fun MypageAllergySection(
                 )
 
                 // TODO("Component : Outlined Button 작업")
-                ComponentButton(
+                UmatButton(
                     backgroundColor = Gray300,
                     text = stringResource(id = R.string.mypage_allergy_default_register),
                     textColor = Gray800,

@@ -47,7 +47,7 @@ import com.teople.umat.component.ui.theme.Gray500
 import com.teople.umat.component.ui.theme.Gray800
 import com.teople.umat.component.ui.theme.Gray900
 import com.teople.umat.component.ui.theme.Gray950
-import com.teople.umat.component.widget.ComponentButton
+import com.teople.umat.component.widget.component.UmatButton
 import com.teople.umat.component.widget.component.UmatTextField
 import com.teople.umat.component.widget.component.UmatTextFieldDefaults
 import com.teople.umat.component.widget.component.UmatTransition
@@ -120,7 +120,7 @@ fun GuideScreen(
                     contentScale = ContentScale.Crop
                 )
             }
-            ComponentButton(
+            UmatButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
@@ -155,7 +155,7 @@ fun SocialLoginScreen(
                     .fillMaxWidth()
                     .padding(top = 61.dp)
             ) {
-                ComponentButton(
+                UmatButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
@@ -174,7 +174,7 @@ fun SocialLoginScreen(
                         )
                     }
                 )
-                ComponentButton(
+                UmatButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
@@ -285,7 +285,7 @@ fun NicknameScreen(
                     }
                 )
 
-                ComponentButton(
+                UmatButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 114.dp)
@@ -378,7 +378,7 @@ fun ConnectScreen(
                         modifier = Modifier.align(alignment = Alignment.Center)
                     )
                 }
-                ComponentButton(
+                UmatButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 80.dp)
@@ -388,7 +388,7 @@ fun ConnectScreen(
                     textColor = Color.White,
                     onClick = { viewModel.onClickConnect() }
                 )
-                ComponentButton(
+                UmatButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp)
@@ -463,7 +463,7 @@ fun CodeInputScreen(
                         viewModel.onInviteCodeTextFieldValueChange(newValue)
                     }
                 )
-                ComponentButton(
+                UmatButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 114.dp)
